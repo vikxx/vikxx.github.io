@@ -8,46 +8,129 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 <link rel="icon" type="image/x-icon" href="https://golos.io/images/favicons/favicon.ico"/>
 <script>var indexPage=false,isBlog=false;</script>
-<script src="scripts/blog.js"></script>
+<script src="https://chain.cf/scripts/blog.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sjcl/1.0.6/sjcl.min.js"></script>
+<style>iframe#chat {width:80%; display:block;min-height: 300px; margin: 8px auto; border-radius: 3px; overflow: hidden; box-shadow: 0 0 12px -2px black; }</style>
 </head>
 <body>
 <div class="golos-form">
  <h2>Постинг в блокчейн голоса</h2>
-			<h3>С помощью данной страницы вы можете записать в блокчейн голоса свой пост. В редактор встроен фотохостинг.</h3>
-	
+ <h3>С помощью данной страницы вы можете записать в блокчейн голоса свой пост. В редактор встроен фотохостинг. Вы можете сохранить исходный код данной страницы
+ на свой пк/телефон и использовать локально.</h3>
+<div id="credits">
+Автор <a href="https://golos.io/@vik">@vik</a>.  Обратная связь - чат <a href="https://t.me/chain_cf">@chain_cf</a>
+ 
+</div>
 <form id="post-golos-form" enctype="multipart/form-data">
 <h2>Опубликовать пост в голосе</h2>
-		    <input type="text" name="post-golos-title" id="post-golos-title" required aria-required="true" placeholder="Заголовок">
-		   
-			
-
-<div class="drdrop"><span id="addimg" onclick="document.querySelector('#loadinp').click()">Загрузить фото</span></div><input id="loadinp" style="visibility: collapse; width: 0px;" type="file" onchange="upload(this.files[0])">
-<div id="text-editor"></div>
-<p>В поле топика, тегов и логина допускаются только латинские маленькие буквы или дефис. Что бы поместить тег на русском найдите его аналог на голосе в формате <i>ru--</i>
-</br>Например тег голос выглядит как <b>ru--golos</b>.</p>
-
- 
 <input type="text" id="username" name="username" required aria-required="true" placeholder="Логин">
 
 
 <input type="password" id="postingkey" name="postingkey" title="Никому не сообщайте свой ключ!" placeholder="Постинг ключ"/>
+
+
+
+
+<h2>		    <input type="text" name="post-golos-title" id="post-golos-title" required aria-required="true" placeholder="Заголовок"></h2>
+	<p>golos.io/<input title="Допускаются только латинские маленькие буквы или дефис" type="text" id="topic" name="topic" required aria-required="true" placeholder="Топик. (Например 'фото')" /><input type="text" id="permlink" name="permlink" required aria-required="true" placeholder="'хвост' ссылки. " pattern="[a-z0-9-]+"/></p>
+	   
+			
+
+<div class="drdrop"><span id="addimg" onclick="document.querySelector('#loadinp').click()">Загрузить фото</span></div><input id="loadinp" style="visibility: collapse; width: 0px;" type="file" onchange="upload(this.files[0])">
+<div id="text-editor"></div>
+
+
  
- <p>golos.io/<input title="Допускаются только латинские маленькие буквы или дефис" type="text" id="topic" name="topic" required aria-required="true" placeholder="ru--golos (топик)" pattern="[a-z0-9-]+"/><input type="text" id="permlink" name="permlink" required aria-required="true" placeholder="permlink (ссылка на пост)" pattern="[a-z0-9-]+"/></p>
-<b>По поводу полей "топик" и "ссылка" - представим как обычно выглядит ссылка на ваш пост.
- Например - <em>golos.io/ru--golos/@vik/testpost</em>. В данной ссылке ru--golos - это транслит тега Голос, а testpost постоянная ссылка на пост. В классическом клиенте голоса ссылка формируется автоматически из заголовка поста, длинная, уродливая версия вашего заголовка в транслите, в моем редакторе вы должны сами придумать ссылку - лаконичную и удобную. </b>
- 
-<p> <input type="text" id="tag1" name="tag1" placeholder="Тег 1" pattern="[a-z0-9-]+">
-<input type="text" id="tag2" name="tag2"  placeholder="Тег 2" pattern="[a-z0-9-]+">
-<input type="text" id="tag3" name="tag3"  placeholder="Тег 3" pattern="[a-z0-9-]+">	</p>	
+
+<p> <input type="text" id="tag1" name="tag1" placeholder="Тег 1" >
+<input type="text" id="tag2" name="tag2"  placeholder="Тег 2" >
+<input type="text" id="tag3" name="tag3"  placeholder="Тег 3" >	</p>
+
+<p><input type="text" id="tag4" name="tag4" placeholder="Тег 4" >
+<input type="text" id="tag5" name="tag5"  placeholder="Тег 5" >
+<input type="text" id="tag6" name="tag6"  placeholder="Тег 6" >	</p>	
+
+<p><input type="text" id="tag7" name="tag7" placeholder="Тег 7" >
+<input type="text" id="tag8" name="tag8"  placeholder="Тег 8" >
+<input type="text" id="tag9" name="tag9"  placeholder="Тег 9" >	</p>	
 		<input type="submit" value="Отправить">
 </form>
 <div id="alerts"></div>
 </div>
 
+
+<iframe id="chat" src="https://chain.chatbro.com" sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
 <script>
+	 
+			 
+var assoc = {
+		"а": "a",
+		"б": "b",
+		"в": "v",
+		"ґ": "g",
+		"г": "g",
+		"д": "d",
+		"е": "e",
+		"ё": "yo",
+		"є": "ye",
+		"ж": "zh",
+		"з": "z",
+		"и": "i",
+		"і": "i",
+		"ї": "yi",
+		"й": "ij",
+		"к": "k",
+		"л": "l",
+		"м": "m",
+		"н": "n",
+		"о": "o",
+		"п": "p",
+		"р": "r",
+		"с": "s",
+		"т": "t",
+		"у": "u",
+		"ф": "f",
+		"x": "kh",
+		"ц": "cz",
+		"ч": "ch",
+		"ш": "sh",
+		"щ": "shch",
+		"ъ": "xx",
+		"ы": "y",
+		"ь": "x",
+		"э": "ye",
+		"ю": "yu",
+		"я": "ya"
+	}
+
+
+function transform(str, spaceReplacement) {
+		if (!str) {
+			return "";
+		}
+		var new_str = '';
+		var ru = '';
+		for (var i = 0; i < str.length; i++) {
+			var strLowerCase = str[i].toLowerCase();
+
+			if (strLowerCase === " " && spaceReplacement) {
+				new_str += spaceReplacement;
+
+				continue;
+			}
+
+			if (!assoc[strLowerCase]) {
+				new_str += strLowerCase;
+			} else {
+				new_str += assoc[strLowerCase];
+				// Если в теге найдены русские символы - стало быть нам нужно добавить префикс ru-- для публикации на голосе
+				ru = 'ru--';
+			}
+		}
+		return ru + new_str;
+	}
 
 
 jQuery(document).ready( function( $ ) {
@@ -70,10 +153,7 @@ jQuery(document).ready( function( $ ) {
   image_advtab: true,
 		save_enablewhendirty: true,
 		save_onsavecallback: function () { console.log('Saved'); },
-		
 	
-  language: 'ru',
-  language_url:'https://golos.rubtc.info/ru.js',
   paste_data_images: true
  
     } );
@@ -103,7 +183,7 @@ window.ondragover = function(e) {e.preventDefault()}
         xhr.send(fd);
     }
 var s;	
-var tag1= "",tag2="",tag3="";
+var tag1= "",tag2="",tag3="",tag4="",tag5="",tag6="",tag7="",tag8="",tag9="";
 
 if("postK" in localStorage){
     document.getElementById('postingkey').placeholder = 'Ваш постинг ключ был введен ранее, сейчас зашифрован и сохранен';
@@ -140,13 +220,32 @@ jQuery( '#post-golos-form' ).on( 'submit', function(e) {
 			
 			
 			 permlink = document.getElementById("permlink").value,
-
 			 tag1 = document.getElementById("tag1").value,
 			 tag2 = document.getElementById("tag2").value,
 			 tag3 = document.getElementById("tag3").value,
-			 topic = document.getElementById("topic").value,
+			 tag4 = document.getElementById("tag4").value,
+			 tag5 = document.getElementById("tag5").value,
+			 tag6 = document.getElementById("tag6").value,
+			 tag7 = document.getElementById("tag7").value,
+			 tag8 = document.getElementById("tag8").value,
+			 tag9 = document.getElementById("tag9").value;
+			 
+			  var rutag1 = transform(tag1, "-");
+			 var rutag2 = transform(tag2, "-");
+			 var rutag3  =transform(tag3, "-");
+			 var rutag4 =transform(tag4, "-");
+			 var rutag5 =transform(tag5, "-");
+			 var rutag6 =transform(tag6, "-");
+			 var rutag7 =transform(tag7, "-");
+			 var rutag8 =transform(tag8, "-");
+			 var rutag9 =transform(tag9, "-"); 
+			 var rutag9 =transform(tag9, "-");
+			 var rutopic = document.getElementById("topic").value;
+			 var topic = transform(rutopic, "-");
+			 
+			 
 			 //tags = document.getElementById("tags").value,
-			 jsonMetadata = {"tags":["vikposting",tag1,tag2,tag3]},
+			 jsonMetadata = {"app":"chain.cf/post.html from vik", "tags":[rutag1,rutag2,rutag3,rutag4,rutag5,rutag6,rutag7,rutag8,rutag9]},
 			 parentAuthor = '', 
 	         parentPermlink = topic;
 			 steem.broadcast.comment(
@@ -163,7 +262,7 @@ jQuery( '#post-golos-form' ).on( 'submit', function(e) {
 					  document.getElementById('alerts').innerHTML = ('<blockquote>'+err+'</blockquote>'); 
 					  }
 					  if(result != null){
-					  document.getElementById('alerts').innerHTML = ('<blockquote>Ошибок не выявлено, проверьте наличие поста - <a href="https://golosdb.com/'+topic+'/@'+u+'/'+permlink+'">golosdb.com/'+topic+'/@'+u+'/'+permlink+'</a>. Что бы отредактировать пост - просто нажмите кнопку отправить еще раз - это заменит содержимое поста на текущее содержимое редактора, важно, что бы вы не меняли ссылку "'+permlink+'". Заменив ссылку - будет создан новый пост, вместо редакции существующего</blockquote>'); 
+					  document.getElementById('alerts').innerHTML = ('<blockquote>Ошибок не выявлено, проверьте наличие поста - <a href="https://golosd.com/@'+u+'">golosd.com/@'+u+'</a>. Что бы отредактировать пост - просто нажмите кнопку отправить еще раз - это заменит содержимое поста на текущее содержимое редактора, важно, что бы вы не меняли ссылку "'+permlink+'". Заменив ссылку - будет создан новый пост, вместо редакции существующего</blockquote>'); 
 					  }
 					  
 					});
