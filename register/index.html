@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<title>Регистрация на golos.io</title>
+<meta name="Description" content="Регистрация на golos.io">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="https://golos.io/images/favicons/favicon.ico"/>
+
+
+<style>
+body {
+    background: linear-gradient(45deg, #012651 0%,#0a508a 0%,#41a5f3 100%,#207cca 100%,#1a5384 101%);
+    color: white;
+    font-family: arial;
+	    margin: 0;
+    padding: 0;
+}
+header {
+    background: #ff3d3d url(https://blogs-images.forbes.com/morganstanley/files/2017/09/Blockchain.jpg);
+    margin: 0;
+    padding: 2% 7%;
+    box-shadow: 0 0 10px black;
+    text-shadow: 3px 3px 20px black;
+}
+strong {
+    background: #284064;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: inset 0 0 10px black;
+    color: white;
+    text-decoration: none;
+}
+input {
+    border: 0;
+    width: 100%;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 5px 0;
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px black;
+    color: #095490;
+}
+
+code {
+    background: black;
+    color: green;
+    display: block;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px;
+}
+.regblock {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 730px;
+    background: #123f63;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: .8rem;
+    display: block;
+    overflow: hidden;
+    box-shadow: 0 0 3px black;
+}
+#notice p {
+    margin: 0;
+}
+button {
+    margin: 10px auto;
+    display: block;
+    background: #ff4a4a;
+    border: 0;
+    padding: 5px 30px;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 20px -5px black;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+#notice {
+    background: #fbfbfb;
+    padding: 10px 25px;
+    margin: 1% 5%;
+    border-radius: 5px;
+    font-size: .7rem;
+    color: #171717;
+}
+.wait {
+    margin: 7px auto;
+    width: 80%;
+    background: #0b2c46;
+    padding: 10px;
+    border-radius: 5px;
+}
+.wait a {
+    background: #138c66;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+.err {
+    background: #ff4a4a;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 500px;
+    margin: 15px auto;
+    font-size: 10px;
+}
+.success{
+    padding: 5px 10%;
+    max-width: 900px;
+    border-radius: 5px;
+    color: #3c3c3c;
+    width: 90%;
+    margin: 17px auto;
+    background: #ffffff;
+    box-shadow: 0 0 5px black;
+}
+</style>
+
+<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
+</head>
+<body>
+
+<header>
+<h1>Регистрация на GOLOS.IO</h1>
+<a href="https://golos.io/@vik"><strong>Сервис предоставлен @vik 🤘🏼</strong></a>
+</header>
+<div id="notice">
+<h3>Данная форма поможет вам создать новый аккаунт в блокчейне GOLOS</h3>
+<p>💡 Вы сможете создать новый аккаунт только при помощи своего существующего аккаунта</p>
+<p>💡 Вам необходимо иметь на счету минимум <b>3 GOLOS</b>, эти голоса должны быть на счету, а не в СИЛЕ ГОЛОСА регистратора!  При создании аккаунта они будут переведены в силу голоса нового аккаунта. </p>
+<p>💡 Если у вас есть только GBG - вы можете обменять их на GOLOS используя внутреннюю биржу голоса.</p>
+<p>💡 Операция создания аккаунта будет видна в блокчейн, таким образом вы не сможете создать анонимный аккаунт для спама</p>
+<p>💡 Аккаунт регистратора будет так же установлен в качестве RECOVERY. В случае если вы потеряете доступ к новому аккаунту - вы сможете восстановить его только при помощи своего аккаунта регистратора</p>
+<p style="color:#ff5252;font-weight:700">📢 Рекомендуется скопировать исходный код страницы и использовать ее локально! Не вводите активный ключ на непроверенных сайтах - у вас могут украсть ваши GOLOS/GBG. Если вы нашли эту или похожую форму на другом сайте - обратитесь в чат <a href="https://t.me/chain_cf">@chain_cf</a> и спросите совета у более опытных пользователей!</p>
+
+
+</div>
+<div class="regblock">
+<p>🔑 Активный ключ регистратора (Должен начинаться на 5 и принадлежать аккаунту регистратору)</p> 
+<input name="wif" id="wif" type="password" role="password">
+<p>✔️ Логин регистратора (С маленькой буквы, без символа @)</p> 
+<input type="text" name="creator" id="creator">
+<p>✔️ Логин для нового аккаунта (Убедитесь, что такого логина нет на голосе)</p> 
+<input type="text" name="name" id="name">
+<p>🔑 Пароль для нового аккаунта (С помощью этого пароля вы сможете зайти на голос)</p> 
+<input type="text" name="pass" id="pass">
+</div>
+
+
+<div id="out"></div>
+
+
+<a class="registration" ><button>⛓ Создать аккаунт</button></a>  
+
+
+<script>
+steem.config.set('websocket','wss://api.golos.cf');
+
+steem.config.set('address_prefix','GLS');
+steem.config.set('chain_id','782a3039b478c839e4cb0c941ff4eaeb7df40bdd68bd441afd444b9da763de12');
+
+var BUTT = document.querySelector("a.registration");
+BUTT.addEventListener("click", function( event ) {
+var NAME = document.getElementById("name").value;
+var PASS = document.getElementById("pass").value;
+
+// Данные создателя аккаунта
+// Активный ключ создателя (вашего существующего аккаунта)
+var  wif= document.getElementById("wif").value;
+
+// Комиссия блокчейну за создание аккаунта
+var  fee= "3.000 GOLOS"
+
+// Логин создателя (вашего существующего аккаунта)
+var  creator= document.getElementById("creator").value;
+
+
+
+// Профиль пользователя. О себе, аватар, и т.д. , можно оставить пустым и заполнить позднее
+var  jsonMetadata= {
+	
+}
+
+
+var x = steem.auth.generateKeys(NAME, PASS, ['owner','active','posting','memo'])
+var  ownerAuth = {
+    weight_threshold: 1,
+    account_auths: [],
+    key_auths: [[x.owner, 1]]
+}
+var  activeAuth = {
+    weight_threshold: 1,
+    account_auths: [],
+    key_auths: [[x.active, 1]]
+}
+var  postingAuth = {
+    weight_threshold: 1,
+    account_auths: [],
+    key_auths: [[x.posting, 1]]
+}
+var  memoKey= x.memo
+
+steem.broadcast.accountCreate(wif, fee, creator, NAME, 
+ownerAuth, 
+activeAuth, 
+postingAuth, 
+memoKey, 
+jsonMetadata, 
+function(err, result) {
+  if(err) { 
+ console.log(err);
+    var jsone = JSON.stringify(err, null, 4);
+  document.getElementById('out').insertAdjacentHTML("afterbegin","<div class='err'><h2>Ошибка!</h2>Подробности ошибки: "+jsone+"</div>")
+  
+  }else{
+  
+  var json = JSON.stringify(result, null, 4);
+  
+  var p = steem.auth.getPrivateKeys(NAME, PASS, ["owner","active","posting","memo"]);
+
+
+     document.getElementById('out').insertAdjacentHTML("afterbegin","<div class='success'><h2>Аккаунт создан!</h2><h4>Войдите в свой новый аккаунт на <a href='https://golos.io'>golos.io</a> используя логин и пароль.</h4><h3> Логин: <code>"+NAME+"</code> </h3><h3>Пароль: <code>"+PASS+"</code></h3>  <p>ПОСТИНГ: <code>"+p.posting+"</code></p><p>АКТИВНЫЙ: <code>"+p.active+"</code> </p> Лог транзакции в блокчейн: </br><code>"+json+"</code></div>");
+
+  }
+  
+});
+})
+</script>
+
+
+</body>
+</html>
