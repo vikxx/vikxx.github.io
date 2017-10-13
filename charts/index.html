@@ -110,10 +110,15 @@
 		font-size: 1.7em;
 		margin: 15px;
 	}
+	.hidemenu{
+	opacity:0
+	}.hidemenu:hover{
+	opacity:1
+	}
 	</style>
 </head>
 <body onclick="closeHelp()">
-	</div>
+<div class="hidemenu">
 	<div class="top">
 		<div id="currencies" class="buttons">Currency: </div>
 		<div id="currRel" class="buttons">Compared to: </div>
@@ -127,6 +132,7 @@
 	</div>
 	<div id="loading">
 		Ожидайте...
+	</div>
 	</div>
 	<div id="ChartContainer">
 		<div id="placeholder">
