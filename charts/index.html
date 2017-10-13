@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+	<meta charset="utf-8">
+	<title>Cryptocurrency Price Chart</title>
+	<script src="jquery-1.10.1.min.js"></script>
+	<script src="highstock.js"></script>
+	<script src="theme.js"></script>
+	<style>
+	body {
+		font-family: "Segoe UI", Helvetica, sans-serif;
+		font-size: 92%;
+		margin: 0;
+		padding: 0;
+
+		height: calc(100% - 70px);
+		text-align: center;
+	}
+	body, #about-inner {
+		background: #1E1F21;
+	}
+	body, .buttons > a, .help-button {
+		color: #D6D6D6;
+	}
+	:focus {
+		outline: 0;
+	}
+	a {
+		color: #3885E2;
+	}
+	#loading, #placeholder, .error {
+		top: 150px;
+		width: 100%;
+		position: absolute;
+	}
+	.error {
+		color: red;
+	}
+	#loading {
+		display: none;
+	}
+	#ChartContainer {
+		height: 100%;
+	}
+	.top {
+		margin-top: 8px;
+	}
+	#currRel {
+		margin-left: 18px;
+	}
+	.top2 {
+		margin-top: 8px;
+	}
+	.buttons {
+		display: inline-block;
+	}
+	.buttons > a, .help-button {
+		display: inline-block;
+		padding-top: 4px;
+		padding-bottom: 3px;
+		padding-left: 4px;
+		padding-right: 4px;
+		margin-left: 7px;
+		margin-right: 3px;
+		border: 1px solid transparent;
+		border-radius: 4px;
+		transition: all ease-out 0.2s;
+		text-decoration: none;
+		min-width: 25px;
+	}
+	.buttons > a:hover {
+		border-color: #D6D6D6;
+	}
+	.buttons > a.active {
+		color: #DDDF0D;
+		border-color: #DDDF0D;
+	}
+	#average-button.active {
+		color: #5494D3;
+		border-color: #5494D3;		
+	}
+	.help-button {
+		margin-left: 35px;
+	}
+	#average-button {
+		margin-left: 10px;
+	}
+	#about {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		top: 0;
+		display: none;
+		background: rgba(22,22,22,0.75);
+	}
+	#about-inner {
+		margin-top: 200px;
+		display: inline-block;
+		border: 1px solid #D6D6D6;
+		border-radius: 4px;
+		padding: 25px;
+		padding-top: 17px;
+		padding-bottom: 17px;
+		text-align: left;
+		line-height: 180%;
+		box-shadow: 0px 0px 20px #0C0C0C;
+	}
+	#about-inner > h1 {
+		text-align: center;
+		font-size: 1.7em;
+		margin: 15px;
+	}
+	</style>
+</head>
+<body onclick="closeHelp()">
+	</div>
+	<div class="top">
+		<div id="currencies" class="buttons">Currency: </div>
+		<div id="currRel" class="buttons">Compared to: </div>
+		<a href="#" onclick="showHelp(event); return false" class="help-button">?</a>
+	</div>
+	<div class="top2">
+		<div id="ranges" class="buttons">Range: </div>
+		<div class="buttons">
+			<a href="#" id="average-button">Average</a>
+		</div>
+	</div>
+	<div id="loading">
+		Loading ...
+	</div>
+	<div id="ChartContainer">
+		<div id="placeholder">
+			Select a currency
+		</div>
+	</div>
+	<div id="about">
+		<div id="about-inner" onclick="showHelp(event);">
+			<h1>Cryptocurrency Price Chart</h1>
+			Original URL: <a href="https://trustable-code.github.io/cryptocurrency-price-chart/">https://trustable-code.github.io/cryptocurrency-price-chart/</a><br>
+			Developer: <a href="https://github.com/trustable-code" target="_blank">Simon Krauter</a><br>
+			Repository: <a href="https://github.com/trustable-code/cryptocurrency-price-chart" target="_blank">https://github.com/trustable-code/cryptocurrency-price-chart</a><br>
+			Data provider: <a href="https://poloniex.com" target="_blank">https://poloniex.com</a><br>
+			Chart library: <a href="https://www.highcharts.com" target="_blank">https://www.highcharts.com</a>
+		</div>
+</body>
+
+<script>
+var currencies = {
+	"USDT": {"shortName": "$", "longName": "Tether Dollar", "showLeft": false},
+	"BTC": {"shortName": "BTC", "longName": "Bitcoin", "showLeft": true, "compareTo": ["USDT"]},
+	"ETH": {"shortName": "ETH", "longName": "Ethereum", "showLeft": true, "compareTo": ["USDT", "BTC"]},
+	"BTS": {"shortName": "BTS", "longName": "Bitshares", "showLeft": true, "compareTo": ["BTC", "BTS"]},
+	"LTC": {"shortName": "LTC", "longName": "Litecoin", "showLeft": true, "compareTo": ["USDT", "BTC", "XMR"]},
+	"ETC": {"shortName": "ETC", "longName": "Ethereum Classic", "showLeft": true, "compareTo": ["USDT", "BTC", "ETH"]},
+	"DASH": {"shortName": "DASH", "longName": "Dash", "showLeft": true, "compareTo": ["USDT", "BTC", "XMR"]},
+	"XMR": {"shortName": "XMR", "longName": "Monero", "showLeft": true, "compareTo": ["USDT", "BTC"]}
+};
+var ranges = {
+	"2d": 2,
+	"1w": 7,
+	"2w": 14,
+	"1m": 30,
+	"3m": 365 / 4,
+	"6m": 365 / 2,
+	"1y": 365,
+	"2y": 365 * 2,
+	"4y": 365 * 4
+};
+var baseTite = document.title;
+var currency = "";
+var currRel = "BTC";
+var defaultRange = "1y";
+var range = defaultRange;
+var showAverage = false;
+var avgPeriod;
+var avgPeriodStr;
+
+for(var cur in currencies) {
+	if(currencies[cur]["showLeft"]) {
+		var el = document.createElement("A");
+		el.id = cur;
+		el.innerHTML = currencies[cur]["shortName"];
+		document.getElementById("currencies").appendChild(el);
+	}
+}
+
+for(var cur in currencies) {
+	var el = document.createElement("A");
+	el.id = cur + "Rel";
+	el.innerHTML = currencies[cur]["shortName"];
+	document.getElementById("currRel").appendChild(el);
+}
+
+for(var ran in ranges) {
+	var el = document.createElement("A");
+	el.id = ran;
+	el.innerHTML = ran;
+	document.getElementById("ranges").appendChild(el);
+}
+updateHref();
+
+window.onhashchange = function() {
+	updateChart();
+}
+updateChart();
+
+function updateChart() {
+	if(currency != "")
+	  document.getElementById(currency).classList.remove("active");
+	document.getElementById(range).classList.remove("active");
+	document.getElementById(currRel + "Rel").classList.remove("active");
+	document.getElementById("average-button").classList.remove("active");
+	var hash = window.location.hash.substr(1);
+	var a = hash.split(":");
+	var currPair = "";
+	currPair = a[0];
+	if(a.length >= 2)
+		range = a[1];
+	if(a.length >= 3 && a[2] == "avg")
+		showAverage = true;
+	else
+		showAverage = false;
+	a = currPair.split("/");
+	if(a.length == 1) {
+		currency = a[0];
+	}
+	else if(a.length == 2) {
+		currency = a[0];
+		currRel = a[1];
+	}
+	if(!(currency in currencies))
+	{
+		currency = "";
+		return;
+	}
+	if(!(currRel in currencies) || isCurrRelDisabled(currRel))
+		currRel = "BTC";
+
+	if(currency == "")
+		return;
+	if(!(range in ranges))
+		range = defaultRange;
+	document.getElementById(currency).classList.add("active");
+	document.getElementById(range).classList.add("active");
+	document.getElementById(currRel + "Rel").classList.add("active");
+	if(showAverage)
+		document.getElementById("average-button").classList.add("active");
+	document.getElementById("ChartContainer").innerHTML = "";
+	document.getElementById("loading").style.display = "block";
+	window.location.href = genHash(currency, currRel, range, showAverage);
+	updateHref();
+	var start = Math.round((new Date().getTime() / 1000) - ranges[range] * 24 * 60 * 60);
+	var period; // number of seconds
+	if(ranges[range] <= 7) {
+	  period = 60*15; // 15 minutes
+	  avgPeriod = 24;
+	  avgPeriodStr = "6h";
+	} else if(ranges[range] <= 14) {
+	  period = 60*30; // 30 minutes
+	  avgPeriod = 24;
+	  avgPeriodStr = "12h";
+	} else if(ranges[range] <= 50) {
+	  period = 60*60*2; // 2 hours
+	  avgPeriod = 24;
+	  avgPeriodStr = "2d";
+	} else if(ranges[range] <= 100) {
+	  period = 60*60*2; // 2 hours
+	  avgPeriod = 48;
+	  avgPeriodStr = "4d";
+	} else if(ranges[range] <= 200) {
+		period = 60*60*4; // 4 hours
+		avgPeriod = 48;
+		avgPeriodStr = "8d";
+	} else {
+		period = 60*60*24; // 1 day
+		avgPeriod = 24;
+		avgPeriodStr = "24d";
+	}
+
+	var url = "https://poloniex.com/public?command=returnChartData&currencyPair=" + currRel + "_" + currency + "&start=" + start + "&end=9999999999&period=" + period;
+	$.ajax(url).done(function(data) {
+		showChart(data);
+	});
+}
+
+function genHash(cur, currRel, ran, showAverage) {
+	var hash = "#" + cur + "/" + currRel + ":" + ran;
+	if(showAverage)
+		hash = hash + ":avg"
+	return hash;
+}
+
+function isCurrRelDisabled(cur) {
+	return cur == currency || (currency != "" && currencies[currency]["compareTo"] && currencies[currency]["compareTo"].indexOf(cur) == -1);
+}
+
+function updateHref() {
+	var rightCount = 0;
+	for(var cur in currencies) {
+		var el = document.getElementById(cur);
+		if(el)
+			el.href = genHash(cur, currRel, range, showAverage);
+		el = document.getElementById(cur + "Rel");
+		el.href = genHash(currency, cur, range, showAverage);
+		if(isCurrRelDisabled(cur))
+		  el.style.display = "none";
+		else {
+		  el.style.display = "";
+		  rightCount++;
+		}
+	}
+	if(currency != "" && rightCount >= 2)
+		document.getElementById("currRel").style.display = "";
+	else
+		document.getElementById("currRel").style.display = "none";
+	for(var ran in ranges) {
+		document.getElementById(ran).href = genHash(currency, currRel, ran, showAverage);
+	}
+	document.getElementById("average-button").href = genHash(currency, currRel, range, !showAverage);
+}
+
+function calculateAverage(rows, period) {
+  var avgRows = [];
+  for(var i = 0; i < rows.length; i++)
+  {
+		var key = rows[i][0];
+		var val = rows[i][1];
+		var count = 1;
+		for(var j = i - Math.round(period/2); j < i; j++) {
+			if(j > 0) {
+				val = val + rows[j][1];
+				count++;
+			}			
+		}
+		for(var j = i + Math.round(period/2); j > i; j--) {
+			if(j < rows.length) {
+				val = val + rows[j][1];
+				count++;
+			}			
+		}
+		val = val / count;
+		avgRows.push([key, val]);
+	}
+	return avgRows;
+}
+
+function getUserfulNumberOfDecimals(rows) {
+	if(rows.length == 0)
+		return 0;
+	var minValue = rows[0][1];
+	var maxValue = rows[0][1];
+	for(var i = 1; i < rows.length; i++)
+	{
+		var val = rows[i][1];
+		if(minValue > val)
+			minValue = val;
+		if(maxValue < val)
+			maxValue = val;
+	}
+	var diff = maxValue - minValue;
+	if(diff == 0)
+		return 0;
+	var decimals = 0;
+	while(diff < 50) {
+		diff = diff * 10;
+		decimals++;
+	}
+	return decimals;
+}
+
+function showChart(data) {
+	Highcharts.setOptions({
+		global: {
+			useUTC: false
+		},
+		chart: {
+			style: {
+				fontFamily: "Noto Sans, serif"
+			}
+		}
+	});
+
+	if(data["error"]) {
+		document.getElementById("ChartContainer").innerHTML = "<div class=\"error\">" + data["error"] + "</div>";
+		document.getElementById("loading").style.display = "none";
+		document.title = baseTite;
+		return;
+	}
+
+	var xAxisFormat;
+	if(ranges[range] <= 7)
+		xAxisFormat = "{value:%a %H:%M}";
+	else if(ranges[range] <= 365)
+		xAxisFormat = "{value:%b %e}";
+	else
+		xAxisFormat = "{value:%Y %b}";
+		
+	var unit = currencies[currRel]["shortName"] + "/" + currencies[currency]["shortName"];
+
+	// prepare data:
+	var series = {
+		name: unit,
+		data: []
+	}
+	for(var i in data) {
+		series.data.push([data[i]["date"] * 1000, data[i]["weightedAverage"]]);
+	}
+	
+	var decimals = getUserfulNumberOfDecimals(series.data);
+	var lastValue = data[data.length - 1]["close"];
+	var lastValueStr = "<span style=\"color:white;\">" + formatFloat(lastValue, decimals) + "</span> " + unit;
+	document.title = formatFloat(lastValue, decimals) + " " + unit + " – " + range + " – " + baseTite;
+	var chartData = {
+		chart: {
+			renderTo: "ChartContainer",
+			type: "line"
+		},
+		title: {
+			y: 30
+		},
+		subtitle: {
+		},
+		xAxis: {
+			type: "datetime",
+			labels: {
+				format: xAxisFormat
+			}
+		},
+		yAxis: {
+			type: "logarithmic",
+			offset: 95,
+			labels: {
+				format: "{value:." + Math.max(decimals - 1, 0) + "f} " + unit
+			}
+		},
+		tooltip: {
+			pointFormat: "<span style=\"color:{series.color}\">\u25CF</span> {point.y:." + decimals + "f} {series.name}<br>",
+			xDateFormat: "%a, %Y-%m-%d %H:%M"
+		},
+		plotOptions: {
+			line: {
+				animation: false,
+				marker: {
+					enabled: false
+				}
+			},
+			spline: {
+				animation: false
+			}
+		},
+		navigator: {
+			enabled: false
+		},
+		rangeSelector: {
+			enabled: false
+		},
+		scrollbar: {
+			enabled: false
+		},
+		credits: {
+			enabled: false
+		}
+	};
+
+	chartData.title.text = currencies[currency]["longName"];
+	if(currRel != "USDT")
+		chartData.title.text = chartData.title.text + " / " + currencies[currRel]["longName"];
+	
+	chartData.subtitle.text = "latest: " + lastValueStr;
+
+	// Add average series:
+	var avgSeries;
+	if(showAverage) {
+		avgSeries = {
+			name: unit + " (" + avgPeriodStr + " average)",
+			data: calculateAverage(series.data, avgPeriod),
+			lineWidth: 1.5
+		}		
+		var avgLastValue = avgSeries.data[avgSeries.data.length - 1][1];
+		var avgLastValueStr = "<span style=\"color:white;\">" + formatFloat(avgLastValue, decimals) + "</span> " + unit;
+		chartData.subtitle.text = avgPeriodStr + " average: " + avgLastValueStr + " | " + chartData.subtitle.text;
+	}	
+	
+	var chart = new Highcharts.StockChart(chartData);
+	chart.addSeries(series);
+	if(showAverage)	
+		chart.addSeries(avgSeries);
+		
+	document.getElementById("loading").style.display = "none";
+}
+
+function showHelp(event) {
+	document.getElementById("about").style.display = "block";
+	event.stopPropagation();
+}
+function closeHelp() {
+	document.getElementById("about").style.display = "";
+}
+
+function getURLParamValue(name) {
+	var a = RegExp(name + "=(.+?)(&|$)").exec(location.search);
+	if(a == null)
+		return null
+  return decodeURI(a[1]);
+}
+
+function formatFloat(value, decimals) {
+	var f = Math.pow(10, decimals);
+	return Math.round(value * f) / f;
+}
+
+</script>
+</html>
