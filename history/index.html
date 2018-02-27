@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<title>История - Поиск операций в аккаунтах блокчейна GOLOS</title>
+<meta name="Description" content="Автономный, отказоустойчивый сервис для поиска, фильтрации и анализа любых событий в аккаунтах GOLOS">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="https://golos.io/images/favicons/favicon.ico" />
+<link rel="canonical" href="https://golos.cf/history/">
+<style>
+    h1 {
+    font-size: 1.2rem;
+    color: white;
+}
+    a{
+        color: #1e6dd1;
+        text-decoration: none;
+    }
+header {
+    background: #2673d5;
+    margin: 0;
+    margin-bottom: 2%;
+    padding: 1% 0.5%;
+    box-shadow: 0 0 10px black;
+    background-size: cover;
+    overflow: hidden;
+}
+header nav#nav {
+    float: right;
+}
+body {
+    color:rgb(19, 19, 19);
+    font-family: 'Roboto Mono', monospace;
+    margin: 0;
+    padding: 0; 
+    background: #efefef;
+   
+}
+
+
+input {
+    border: 0;
+    width: 98%;
+    font-weight: 700;
+    background: #f8f8f8;
+   
+    padding: 5px;
+    margin: 0.7rem 0 2rem 0;
+    border-radius: 5px;
+    box-shadow: inset 0 0 3px #ebebeb;
+    color: #3286f1;
+}
+p {
+    margin: 0;
+}
+code {
+    background: black;
+    color: #3fc33f;
+    display: block;
+    width: 99%;
+    padding: 0.5%;
+    border-radius: 3px;
+    margin: 1rem 0;
+    overflow: hidden;
+    word-break: break-all;
+}
+.regblock {
+    transition: all 2s ease;
+    transform: scale(1);
+    background: white;
+    color: #1d1d1d;
+    margin: 10px 2%;
+    padding: 1%;
+    font-size: .8rem;
+    width: 94%;
+    border-radius: 5px;
+    display: block;
+    overflow: hidden;
+    box-shadow: 0 0 10px -4px #5b5b5b;
+    min-height: 100%;
+}
+.gradient{
+    background: linear-gradient(45deg, #202020 0%,#282828 0%,#131313 100%,#6c6c6c 100%,#797979 101%);
+}
+
+pre {
+    overflow: auto;
+    background: #ffffff;
+    margin: 5px auto 20px auto;
+   
+    padding: 0 10px;
+    color: #343434;
+    max-height: 13rem;
+    border-radius: 3px;
+    box-shadow: 0 0 15px -8px #3a3a3a;
+}
+section {
+    display: inline-block;
+    width: 75%;
+    float: right;
+    margin-bottom: 5rem;
+}
+button {
+    margin: 10px auto;
+    display: block;
+    background: #2673d5;
+    border: 0;
+    padding: 5px 30px;
+    color: white;
+    border-radius: 2px;
+    box-shadow: 0 0 10px -5px #686868;
+    transition: all 1s;
+    cursor: pointer;
+}
+#notice {
+    background:#1e9474;
+    padding: 2% 1%;
+    width: 96%;
+    line-height: 1.37;
+    margin: 1rem 1%;
+    border-radius: 5px;
+    color: #ffffff;
+}
+.wait button{
+   background: grey;
+}
+.wait button:before {
+    content: '⏳';
+}
+.err {
+    background: #ff4a4a;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 500px;
+    margin: 15px auto;
+    
+}
+a.menu {
+    background: #dc4747;
+    color: white;
+    text-decoration: none;
+    padding: 1px 3px;
+    border-radius: 5px;
+}
+footer {
+    background: #2673d5;
+    display: inline-block;
+    margin-top: 50px;
+    width: 100%;
+    height: 100%;
+    color: white;
+    box-shadow: 0 0 10px #4d4d4d;
+}
+footer a{
+color: white;
+    text-decoration: none;
+}
+
+footer ul {
+    list-style: none;
+}
+.remove {
+    display: block;
+    background: #123f63;
+    padding: 25px;
+    margin: 0 auto;
+    text-align: center;
+}
+.remove a{
+text-decoration:none
+}
+.remove a {
+    text-decoration: none;
+    color: aliceblue;
+    background: #ff4a4a;
+    padding: 2px 10px;
+    border-radius: 3px;
+}
+textarea {
+    width: 99%;
+    margin: 0.5rem 0 0rem 0;
+    box-shadow: inset 0 0 3px #e1e1e1;
+    border: 0;
+    background: #fafafa;
+    color: #007d00;
+   
+    border-radius: 3px;
+    padding: 0.5%;
+}
+h2 {
+    padding: 0.5%;
+}
+.log {
+    font-size: .7rem;
+    
+    word-break: break-word;
+}
+.regblock span {
+    
+    opacity: .5;
+    transition: all 0.3s;
+    margin: 0.5rem 0;
+}
+
+.regblock:hover span{
+    opacity: 1;
+
+}
+header nav a {
+    color: #515151;
+    text-decoration: none;
+    background: #ffffff;
+    margin: 5px;
+    padding: 10px;
+    font-size: 12px;
+    width: 120px;
+    display: inline-block;
+    height: 60px;
+    overflow: hidden;
+    font-weight: 700;
+    border-radius: 2px;
+    transition: .2s all ease;
+}
+nav a:hover{
+    box-shadow: 0 0 5px rgb(83, 83, 83);
+}
+svg {
+    height: 800px;
+    margin-top: -355px;
+    transform: rotate(90deg);
+    z-index: 300;
+    margin-bottom: -360px;
+}
+
+path, line, circle, polygon {
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  animation: offset 3s infinite linear backwards;
+}
+select {
+    display: block;
+    margin: .5rem 0;
+    width: 100%;
+    padding: 5px;
+    background: #fafafa;
+    color: #575757;
+    
+    border: 0;
+    border-radius: 3px;
+    box-shadow: inset 0 0 3px #c8c8c8;
+}
+a#navlink {
+    background: #ff4d4d;
+    padding: 10px;
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px black;
+}
+article {
+    background: #00000000;
+    color: #2e2e2e;
+    
+    padding: 0 2%;
+    margin-bottom: 40px;
+    border-radius: 3px;
+    font-weight: normal;
+}
+
+pre::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(89, 161, 255, 0.3);
+	border-radius: 5px;
+	background-color:white;
+}
+
+pre::-webkit-scrollbar,
+body::-webkit-scrollbar,
+textarea::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: rgb(16, 77, 158);
+}
+
+pre::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb
+{
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+
+@keyframes offset {
+  to {
+    stroke-dashoffset: -500;
+  }
+}
+
+
+input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    margin: 0;
+    vertical-align: middle;
+    box-shadow: none;
+    opacity: .7;
+    display: inline-block;
+}
+#state {
+    background: #17845d;
+    width: 100%;
+    height: auto;
+    position: fixed;
+    box-shadow: 0px 15px 25px black;
+    top: 0px;
+    z-index: 999;
+    right: 0;
+}
+h2 {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+
+nav#fixedNav {
+    transition: 1s all cubic-bezier(0.58, -0.3, 0.29, 1.5);
+    bottom: -100px;
+}
+nav#fixedNav.showthis {
+    bottom: 50px;
+}
+nav.nextPage {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+}
+.nextPage button {
+    float: right;
+    margin-right: 1rem;
+}
+.regblock.removethis{
+    transition: all .8s ease;
+    transform: translateY(-1500px);
+    height: 10px;
+    overflow: hidden;
+}
+button#loadmore.removethis {
+    display: none;
+}
+span.type {
+    background: #b0b0b0;
+    color: white;
+    padding: 1px 7px;
+    border-radius: 2px;
+}
+.notice {
+    margin: 2%;
+    background: #ffffff;
+    padding: 15px;
+    color: #555555;
+    text-align: center;
+    border-radius: 3px;
+    box-shadow: 0 0 10px -4px;
+    font-weight: 700;
+}
+hr {
+    background: #f6f6f6;
+    border: none;
+    height: 1px;
+    width: 100%;
+}
+
+label {
+    font-size: .66rem;
+}
+#loader{
+    width: 100%;
+    height: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    transition: 1s all ease;
+    background: transparent;
+    z-index: 10000
+}
+#loader.loading {
+    background: rgba(3, 40, 67, 0.62) url(/img/puff.svg) center no-repeat;
+    background-size: contain;
+    padding: 0;
+    height: 100%!important;
+    text-align: center;
+    font-size: 1.1rem;
+}
+article.vote .type {
+    background: #347bff;
+}
+article.transfer .type {
+    background: gold;
+}
+
+article.account_update .type {
+    background: red;
+}
+#state pre {
+    max-height: 78vh;
+    z-index: 9999999999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 5% 1%;
+    width: 95%;
+    box-shadow: 0 0 30px -5px black;
+    border-radius: 5px;
+    background: #1e1e1ef2;
+    color: #5fe95f;
+    
+} 
+#state pre .pointer {
+    font-size: 2.3rem;
+    z-index: 99;
+    position: fixed;
+    right: 3rem;
+}
+span.pointer {
+    cursor: help;
+}
+span.pointer.commentdata {
+    background: #ff4a4a;
+    padding: 1px 4px;
+    display: inline-block;
+    border-radius: 3px;
+    margin: 5px 0;
+    color: white;
+}
+aside#usergloabalinfo {
+    float: left;
+    width: 25%;
+    
+}
+#usergloabalinfo pre {
+    background: #ffffff;
+    color: #666666;
+    max-height: unset;
+    height:auto;
+    padding: 10px;
+    margin: 2%;
+    border-radius: 3px;
+    overflow: hidden;
+    transition: .5s all ease;
+}
+#usergloabalinfo xmp {
+    background: #f6f6f6;
+    color: green;
+    font-size: 7pt;
+    padding: 5pt 0;
+    border-radius: 3px;
+    overflow-x: auto;
+    box-shadow: inset 0 0 6px #c8c8c8;
+}
+
+.loading button {
+    font-size: 1.5rem;
+    background: #ffffff;
+    color: #9b9b9b;
+    margin-top: 150px;
+}
+input#username {
+    float: left;
+    width: 20%;
+    margin-bottom: 10px;
+}
+select#opType {
+    float: right;
+    width: 78%;
+    margin: 0.7rem 0 2rem 0;
+    margin-bottom: 10px;
+    box-shadow: inset 0 0 3px #ebebeb;
+}
+@media only screen and (max-width:780px) {
+    aside#usergloabalinfo,section, .regblock, .out{
+        float: none!important;
+        width: 98%!important;
+        margin: 1rem auto;
+    }
+
+    input#username {
+    float: none;
+    width: 98%;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+
+select#opType {
+    float: none;
+    width: 90%;
+    margin: 20px auto;
+    margin-bottom: 30px;
+    box-shadow: inset 0 0 3px #c3c3c3;
+    background: #f1f1f1;
+}
+
+}
+</style>
+</head>
+<body>
+<header>
+<h1>🔎 GOLOS Accounts history Explorer</h1>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+viewBox="0 0 300.5 1868.9" enable-background="new 0 0 300.5 1868.9" xml:space="preserve">
+<g>
+<path fill="none" stroke="#fff" stroke-width="6" stroke-miterlimit="10" d="M151.8,9.5l63.7,106.9h-38.3
+   c0,0-15.3,2.7-15.7,20.8c-0.2,12.7-1.3,456.7-1.3,456.7l-10-8.7l-10.5,8.7v-454c0,0,0.1-22.7-16.2-22.7c-16.1,0-40.7,0.2-40.7,0.2
+   L151.8,9.5z"/>
+<line fill="none" stroke="#fff" stroke-width="10" stroke-miterlimit="10" x1="110.1" y1="212.9" x2="110.1" y2="398.9"/>
+<line fill="none" stroke="#fff" stroke-width="10" stroke-miterlimit="10" x1="191.1" y1="212.9" x2="191.1" y2="398.9"/>
+<circle fill="none" stroke="#fff" stroke-width="5" stroke-miterlimit="10" cx="109.5" cy="432.5" r="8"/>
+<circle fill="none" stroke="#fff" stroke-width="5" stroke-miterlimit="10" cx="191.5" cy="432.5" r="8"/>
+<circle fill="none" stroke="#fff" stroke-width="5" stroke-miterlimit="10" cx="109.5" cy="463.5" r="8"/>
+<circle fill="none" stroke="#fff" stroke-width="5" stroke-miterlimit="10" cx="191.5" cy="463.5" r="8"/>
+<circle fill="none" stroke="#fff" stroke-width="5" stroke-miterlimit="10" cx="109.5" cy="495.5" r="8"/>
+<circle fill="none" stroke="#fff" stroke-width="5" stroke-miterlimit="10" cx="191.5" cy="495.5" r="8"/>
+<circle fill="none" stroke="#fff" stroke-width="5" stroke-miterlimit="10" cx="109.5" cy="526.5" r="8"/>
+<circle fill="none" stroke="#fff" stroke-width="5" stroke-miterlimit="10" cx="191.5" cy="526.5" r="8"/>
+<polygon fill="none" stroke="#fff" stroke-width="5" stroke-miterlimit="10" points="150.1,598.5 112.8,636.2 125.1,649.2 
+   150.1,623.9 175.1,649.2 188,637.1 	"/>
+<line fill="none" stroke="#fff" stroke-width="20" stroke-miterlimit="10" x1="150.1" y1="648.9" x2="150.1" y2="704.9"/>
+<circle fill="none" stroke="#fff" stroke-width="10" stroke-miterlimit="10" cx="150.1" cy="754.1" r="26.3"/>
+<line fill="none" stroke="#fff" stroke-width="20" stroke-miterlimit="10" x1="113.1" y1="805.9" x2="113.1" y2="861.9"/>
+<line fill="none" stroke="#fff" stroke-width="20" stroke-miterlimit="10" x1="185.1" y1="806.9" x2="185.1" y2="862.9"/>
+<line fill="none" stroke="#fff" stroke-width="20" stroke-miterlimit="10" x1="150.1" y1="805.9" x2="150.1" y2="890.9"/>
+<line fill="none" stroke="#fff" stroke-width="10" stroke-miterlimit="10" x1="59.1" y1="1046.9" x2="59.1" y2="1232.9"/>
+<line fill="none" stroke="#fff" stroke-width="10" stroke-miterlimit="10" x1="239.1" y1="1046.9" x2="239.1" y2="1232.9"/>
+<line fill="none" stroke="#fff" stroke-width="10" stroke-miterlimit="10" x1="109.1" y1="1167.9" x2="109.1" y2="1353.9"/>
+<line fill="none" stroke="#fff" stroke-width="10" stroke-miterlimit="10" x1="190.1" y1="1167.9" x2="190.1" y2="1353.9"/>
+<polygon fill="none" stroke="#fff" stroke-width="6" stroke-miterlimit="10" points="150.3,901.9 38.1,1010.9 140.1,1010.9 
+   139.9,1048.9 94.1,1048.9 93.8,1066.9 140.1,1066.9 139.9,1096.9 94.1,1096.9 93.9,1114.9 140.1,1114.9 139.9,1406.9 7.1,1538.4 
+   19.3,1551.1 138.1,1435.9 138.1,1476.9 6.1,1608.9 17.8,1621.9 138.1,1505.9 138.1,1540.9 6.1,1669.9 17.8,1681.9 138.1,1566.9 
+   138.1,1605.9 6.1,1738.9 17.8,1750.9 138.1,1636.9 138.1,1770.9 159.1,1770.9 159.1,1634.9 274.1,1750.9 288.6,1737.9 
+   157.1,1606.9 157.1,1566.9 275.1,1683.9 290.9,1667.4 156.1,1533.4 156.1,1499.9 278.1,1620.9 291.9,1606.8 156.1,1471.3 
+   156.1,1431.9 274.1,1548.9 287.1,1535.4 156.1,1404.9 156.1,1115.9 204.1,1115.9 204.1,1097.9 160.1,1097.9 160.1,1065.9 
+   203.1,1065.9 203.1,1048.9 159.1,1048.9 159.1,1009.9 263.1,1009.9 	"/>
+<line fill="none" stroke="#fff" stroke-width="10" stroke-miterlimit="10" x1="121.1" y1="1844.9" x2="179.1" y2="1844.9"/>
+<line fill="none" stroke="#fff" stroke-width="10" stroke-miterlimit="10" x1="121.1" y1="1863.9" x2="179.1" y2="1863.9"/>
+<circle fill="none" stroke="#fff" stroke-width="10" stroke-miterlimit="10" cx="150.1" cy="1796.4" r="27.5"/>
+</g>
+</svg>
+
+        
+<nav id="nav">
+    <a href="https://golos.io/ru--golos/@vik/golos-cf-history-avtonomnyi-otkazoustoichivyi-servis-dlya-poiska-filtracii-i-analiza-lyubykh-sobytii-v-akkauntakh-golos-steem">Описание и инструкции в блоге @vik 🤘🏼</a>
+    <a href="https://t.me/chain_cf">📢 Нужна помощь? Обратитесь в чат - @chain_cf</a>
+    <a href="https://golos.cf/multisig/">🔑🔑 Настройка мультисиг-аккаунтов</a>
+    <a href="https://golos.cf/reg.html">🔌 Быстрая регистрация аккаунтов GOLOS</a>
+    </nav> 
+</header>
+
+    <div id="mainform" class="regblock">
+   <h3>GOLOS блокчейн | <a href="https://golos.cf/history/steem/">Переключить на STEEMIT</a></h3>
+    <input placeholder="👻Логин" title="С маленькой буквы, без символа @" type="username" name="username" id="username">
+    <select title="Фильтр по определенным операциям" id="opType">
+            <option selected="selected" value="ALL">Любые типы операций</option>
+            <option value="author_reward">Авторские награды</option>
+            <option value="transfer">Трансферы монет</option>
+            <option value="comment">Посты и комментарии</option>
+            <option value="vote">Апвоты/Флаги/Отмены</option>
+            <option value="account_update">Обновление аккаунта</option>
+            <option value="custom_json">Фолловинги/Реблоги/Custom</option>
+            <option value="delete_comment">Удаление комментариев</option>
+            <option value="account_witness_vote">Голоса за делегатов</option>
+            <option value="account_create">Создание аккаунта</option>
+            <option value="transfer_to_vesting">Перевод в силу голоса</option>
+            <option value="withdraw_vesting">Вывод из силы голоса - запрос</option>
+            <option value="fill_vesting_withdraw">Вывод из СГ - зачисление</option>
+            <option value="limit_order_create">Создание ордера</option>
+            <option value="limit_order_create2">limit_order_create2</option>
+            <option value="limit_order_cancel">Отмена ордера</option>
+            <option value="fill_order">Ордер сыграл</option>
+            <option value="feed_publish">Прайсфид</option>
+            <option value="convert">Запрос конвертации</option>
+            <option value="witness_update">Обновление ноды</option>
+            <option value="account_witness_proxy">Проксирование</option>
+            <option value="pow">Майнинг</option>
+            <option value="pow2">Майнинг pow2</option>
+            <option value="custom">custom</option>
+            <option value="comment_options">Опции комментария</option>
+            <option value="set_withdraw_vesting_route">Переадресация СГ</option>
+            <option value="challenge_authority">Проверка авторизации</option>
+            <option value="prove_authority">Доказательство авторизации</option>
+            <option value="request_account_recovery">Запрос на восстановление</option>
+            <option value="recover_account">Восстановление аккаунта</option>
+            <option value="change_recovery_account">Смена рекавери</option>
+            <option value="escrow_transfer">Трансфер гаранту</option>
+            <option value="escrow_dispute">Диспут Escrow</option>
+            <option value="escrow_release">Релиз Escrow</option>
+            <option value="escrow_approve">Одобрение Гаранта</option>
+            <option value="transfer_to_savings">Перевод в сейф</option>
+            <option value="transfer_from_savings">Вывод из сейфа</option>
+            <option value="cancel_transfer_from_savings">Отмена вывода из сейфа</option>
+            <option value="custom_binary">Публикация бинарных данных</option>
+            <option value="decline_voting_rights">Запрет голосования</option>
+            <option value="reset_account">Сброс аккаунта</option>
+            <option value="set_reset_account">Права на брос</option>
+            <option value="fill_convert_request">Успешная Конвертация</option>
+            <option value="curation_reward">Кураторские награды</option>
+            <option value="comment_reward">Награды за комментарий</option>
+            <option value="comment_payout_update">Выплата за пост - обновление</option>
+            <option value="liquidity_reward">Бонус за ликвидность</option>
+            <option value="shutdown_witness">Деактивация ноды (автоматически)</option>
+            <option value="fill_transfer_from_savings">Вывод из сейфа - зачисление</option>
+            <option value="hardfork">Принятие хардфорка</option>
+
+    </select>
+    <hr>
+    <p>🔎 Поисковые запросы</p>
+
+ 
+    <input type="checkbox" id="matchAll" name="matchAll" value="true">
+    <label for="matchAll">Искать наличие всех ключевых слов. Если не отметить - будут показаны операции с наличием даже одного ключевого слова.</label>
+   <textarea  placeholder="Введите ключевые слова которые хотите найти в операциях. Можно использовать любые ключевые слова, в том числе наименование операций. Каждое слово с новой строки" title="Ключевые слова. Каждое слово с новой строки" name="keywords" id="keywords" cols="60" rows="5"></textarea>
+   <hr>
+    
+    <p>⛔️ Стоп слова</p>
+    <textarea placeholder="Введите стопслова если хотите скрыть результаты поиска с содержанием таких слов. Можно использовать любые ключевые слова, в том числе наименование операций. Каждое слово с новой строки. Если в операции будет найдено как минимум 1 стопслово - операция не будет показана." title="Стоп слова. Каждое слово с новой строки" name="stopkeywords" id="stopkeywords" cols="60" rows="5"></textarea>
+    <select title="Выбор ноды для доступа к блокчейну" id="publicNode">
+        <option selected="selected" value="wss://api.golos.cf">Подключение через ноду @vik</option>
+        <option value="wss://ws.golos.io">wss://ws.golos.io</option>
+       
+    </select>
+    <hr>
+    <input type="checkbox" id="autoScanNext" name="autoScanNext" value="true">
+    <label for="autoScanNext">Нажмите здесь если хотите просканировать весь объем истории аккаунта. Для аккаунтов с большой активностью это требует нескольких минут. Скорость выполнения зависит от мощности вашего компьютера</label>
+   
+    <button onclick="historyScan(0)" class="runSearch">🔎ПОИСК</button>
+    </div>
+        
+            
+             
+    
+
+    
+  
+
+    <aside id="usergloabalinfo"></aside>
+    <section id="step">
+        <h2>Поиск любых операций и данных в истории аккаунта</h2>
+        
+            
+        <div id="userinfo"></div>  
+             <div id="aside" class="out"><div id="aboveout"></div>
+              
+             <div id="out"></div>
+             
+           </div>
+        </section>    
+ <footer id="footer">
+     <div id="state"></div>
+     <nav id="fixedNav" class="nextPage"><button id="loadmore" title="Загрузить более ранние операции" onclick="historyScan(1)">Раньше</button> <a href="https://golos.cf/history"><button title="Перезагрузка страницы для работы с новым аккаунтом">Новый поиск</button></a>
+     </nav>
+        <ul>
+                <li><a href="https://golos.cf/multisig/">📌 Управление мультисигом</a></li>
+                <li><a href="https://wiki.golos.io/2-rewards/delegatstvo.html">📌 О делегатстве на wiki.golos.io</a></li>
+                <li><a href="https://golos.io/~witnesses">📌 Голосование за делегатов golos.io/~witnesses</a> </li>
+                <li><a href="https://goldvoice.club/witnesses/">📌 Голосование за делегатов goldvoice.club/witnesses</a></li>
+                <li><a href="https://golos.cf/reg.html">📌 Регистрация на голосе без смс верификации</a></li>
+                <li><a href="https://golos.cf/steem">📌 Регистрация на steemit без смс верификации</a></li>
+                <li><a href="https://golos.cf/proxy">📌 Проксирование голосования за делегатов</a></li>
+                <li><a href="https://golos.cf">📌 Нода wss://api.golos.cf</a></li>
+                <li><a href="https://golos.io/@vik">📌 Блог @vik</a></li>
+        </ul>
+   
+        <div id="loader"><button onclick="sendReturn()">Остановить поиск</button><div id="progress"></div></div>
+</footer>
+<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
+<script>
+ 
+function paramToObj (u){
+    var r = {};
+    if(u){
+        u = decodeURIComponent(u.replace(/\?|\#/g,"")).split(/\&/);
+        u.forEach(function(c, i){
+            c = c.split("=");
+
+            var key = c[0].toLowerCase();
+            var value = c[1];
+            if(/^(null|false|true|[0-9]+)$/.test(value)){
+                value = JSON.parse(value);
+            }
+
+            if ( key.match(/\[\]/g)){
+                key = key.replace(/\[\]/g, "");
+
+                if(!r[key]){
+                    r[key] = [];
+                }
+                r[key].push(value);
+            }else{
+
+                r[key] = value;
+            }
+
+        });
+    }
+    return r;
+};
+var xx = window.location.search.substring(2).toString();
+var nextFrom=-1,nextLimit=1000,total,aboveoutFrom,count,firstscan = true,done,canScan=true,uriConfig,config;    
+
+
+var historyScan = function(nextPage){
+
+
+var username = document.getElementById("username").value.toLowerCase().replace("@", ""),
+ keywords = document.getElementById("keywords").value.split('\n'),
+ stopkeywords = document.getElementById("stopkeywords").value.split('\n'),
+ matchAll = document.getElementById("matchAll").checked,
+ autoScanNext = document.getElementById("autoScanNext").checked,
+ operationType = document.getElementById('opType'),
+ opType = operationType.options[operationType.selectedIndex].value, 
+ publicNode = document.getElementById('publicNode'),
+ wss = (publicNode.options[publicNode.selectedIndex].value)?publicNode.options[publicNode.selectedIndex].value:'wss://api.golos.cf';
+
+
+if(uriConfig){
+username = config.login;
+stopkeywords = (config.stop)?config.stop.split(',') : [""];
+keywords = (config.keywords)?config.keywords.split(',') : [""];
+matchAll =(config.match)?true:false;
+autoScanNext = (config.all)?true:false;
+opType = (config.type)?config.type:"ALL";
+
+
+
+}
+console.log("URL ддя этого запроса: ","https://golos.cf/history?login="+username+"&stop="+stopkeywords+"&keywords="+keywords+"&match="+matchAll+"&all="+autoScanNext+"&type="+opType)
+window.history.pushState("Account history", "GOLOS Account history", "/history/?login="+username+"&stop="+stopkeywords+"&keywords="+keywords+"&match="+matchAll+"&all="+autoScanNext+"&type="+opType);
+console.log("Параметры запроса: ",username,stopkeywords,keywords,matchAll,autoScanNext,opType)
+
+steem.api.setOptions({ url: wss });
+steem.config.set('websocket',wss);
+steem.config.set('address_prefix','GLS');
+steem.config.set('chain_id','782a3039b478c839e4cb0c941ff4eaeb7df40bdd68bd441afd444b9da763de12');
+
+
+steem.api.getAccounts([username], function(err, response){
+    if(err) return alert("Ошибка, откройте консоль браузера чтобы увидеть подробности.",err);
+
+var age = (new Date - new Date(response[0].last_vote_time + "Z")) / 1000;
+var actualVP = response[0].voting_power + (10000 * age / 432000);
+actualVP = Math.min(actualVP / 100, 100).toFixed(2);
+
+  document.getElementById("usergloabalinfo").innerHTML = "<pre>Общая информация о "+username+": </br><h3>Сила "+actualVP+"%</h3> </br><b>Балансы:</b></br>"+response[0].balance+"</br>"+response[0].sbd_balance+"</br></br>В сейфе (холд 3 дня)</br>"+response[0].savings_balance+"</br>"+response[0].savings_sbd_balance+"</br></br>Рекавери @"+response[0].recovery_account+"</br> <xmp>"+JSON.stringify(response,null,1)+"</xmp></pre>";
+});
+
+
+var contains = function(target, pattern, stopwords){
+    var value = 0;
+    pattern.forEach(function(word){
+      value = value + target.includes(word);
+      
+    });
+if(stopwords && matchAll) return (value === stopkeywords.length);
+if(stopwords) return (value === 1);
+if(matchAll) return (value === keywords.length);
+return (value === 1);
+}
+
+if(!nextPage){ 
+    document.getElementById("mainform").classList.add("removethis");
+    document.getElementById("fixedNav").classList.add("showthis");
+}
+if(autoScanNext){
+    document.getElementById("loader").classList.add("loading");
+}
+var getAccountHistory = function(FROM,LIMIT){
+    if(!canScan)return console.log('Поиск оставновлен пользователем')
+steem.api.getAccountHistory(username, FROM, LIMIT,function (err, result) {
+        if (err) return alert(JSON.stringify(err))
+        //console.log(result)
+        
+        nextFrom = result[0][0]-1;
+        
+        if(firstscan) {
+            total = result[result.length-1][0];
+            firstscan = false;
+            if(!autoScanNext && total > 1001){
+                console.log(total)
+                document.getElementById('userinfo').innerHTML = "<div class='notice'>Сканирование аккаунта "+username+", всего операций в истории аккаунта: "+total+". Показаны 1000 недавних. Нажмите РАНЬШЕ для загрузки прошлых операций</div>"
+            }
+            
+        }
+        
+        for (var i = 0; i < result.length; i++) {
+            if(!canScan)return console.log('Поиск оставновлен пользователем')
+            var x = result[i],
+            block = x[1].block,
+            time = x[1].timestamp,
+            trxid = x[1].trx_id,
+            requiredType =(opType === "ALL")?true:x[1].op[0] === opType;
+           
+            if (requiredType) {
+            var RAW = JSON.stringify(x[1].op, null, 4),
+             match = contains(RAW, keywords, false),
+             markedStop = false;
+             if(stopkeywords[0].length){
+                var regx = new RegExp(stopkeywords.join('|'),"i");
+                markedStop = regx.test(RAW);
+                
+             }
+             
+            if(match && !markedStop){
+                count++
+                //console.log(count,block,time,trxid,RAW);
+                
+                 var author="'"+x[1].op[1]['author']+"'",permlink="'"+x[1].op[1]['permlink']+"'";
+                
+                 
+                var getCommentData = (x[1].op[0] === 'comment')? '<span onclick="getComment('+author+','+permlink+')" class="pointer commentdata">Загрузить данные связанные с этим постом/комментарием</span>':'';
+                document.getElementById('out').insertAdjacentHTML("afterbegin","<article class='"+x[1].op[0]+"'><span class='type'>"+x[1].op[0]+"</span> ⏱ "+time+" GMT 0 <span class='pointer' title='Нажмите для загрузки данных блока' onclick='getBlock("+block+")'>📦 "+block+"</span> <a href='https://golos.cf/tx?="+trxid+"' target='_blank'>📋 golos.cf/tx?="+trxid+"</a></br> "+getCommentData+"<pre><xmp>"+RAW+"</xmp></pre></article>")
+                
+            }
+            }
+            
+        }
+
+        nextLimit = (nextFrom>1e3)?1e3:nextFrom;
+        if(nextFrom<0){
+            document.getElementById("state").innerHTML = "<h3>✔️ История "+username+" просканирована полностью</h3>"
+            if(autoScanNext)document.getElementById("loader").classList.remove("loading");
+            document.getElementById("loadmore").classList.add("removethis");
+            done = true
+        }else if(autoScanNext){
+            getAccountHistory(nextFrom,nextLimit);
+        }
+        
+        aboveoutFrom = nextFrom-nextLimit
+        document.getElementById('progress').innerHTML = "Всего найдено "+total+" записей в истории. Осталось проверить: "+nextFrom;
+       if(!autoScanNext)document.getElementById("loader").classList.remove("loading");
+          
+        });
+}
+
+if(nextPage){
+    document.getElementById('aboveout').innerHTML = "<div class='notice'>Показаны операции с "+aboveoutFrom+" по "+nextFrom+"</div>";
+    document.getElementById('out').innerHTML = "<div class='notice'>Загрузка "+nextLimit+" операций...</div>";
+    }
+getAccountHistory(nextFrom,nextLimit);
+
+
+
+};
+
+if(xx){
+config = paramToObj(window.location.search)
+//https://golos.cf/history/scan.html?login=vik&stop=one|two|three&keywords=red|black|white&all=1&match=0&type=vote
+//https://golos.cf/history/scan.html?login=vik&stop=stopslovo&keywords=0.001%20GBG&all=0&match=0&type=ALL
+uriConfig = config.login.length > 2;
+if(uriConfig) {setTimeout(function(){ historyScan(0); }, 2000);};
+document.getElementById("loader").classList.add("loading");
+}
+
+var Reload = function(){
+return location.reload();
+}
+
+var sendReturn = function(){
+canScan = false;
+return document.getElementById("loader").classList.remove("loading");
+}
+
+var clearDiv = function(){
+return document.getElementById("state").innerHTML = null;
+}
+
+var getBlock = function(blockNum){
+steem.api.getBlock(blockNum, function(err, result) {
+  if(err) return alert("Ошибка, откройте консоль браузера чтобы увидеть подробности.",err);
+  
+  document.getElementById("state").innerHTML = "<pre><span class='pointer' onclick='clearDiv()'>🔙</span><xmp>"+JSON.stringify(result,null,4)+"</xmp></pre>";
+});
+}
+
+var getComment = function(author,permlink){
+steem.api.getContent(author, permlink, function(err, result) {
+    if(err) return alert("Ошибка, откройте консоль браузера чтобы увидеть подробности.",err);
+
+    
+document.getElementById("state").innerHTML = "<pre><span class='pointer' onclick='clearDiv()'>🔙</span><xmp>"+JSON.stringify(result,null,4)+"</xmp></pre>";
+
+});
+}
+
+
+
+
+
+</script>
+<script id="chatBroEmbedCode">/* Chatbro Widget Embed Code Start */function ChatbroLoader(chats,async){async=!1!==async;var params={embedChatsParameters:chats instanceof Array?chats:[chats],lang:navigator.language||navigator.userLanguage,needLoadCode:'undefined'==typeof Chatbro,embedParamsVersion:localStorage.embedParamsVersion,chatbroScriptVersion:localStorage.chatbroScriptVersion},xhr=new XMLHttpRequest;xhr.withCredentials=!0,xhr.onload=function(){eval(xhr.responseText)},xhr.onerror=function(){console.error('Chatbro loading error')},xhr.open('GET','//www.chatbro.com/embed.js?'+btoa(unescape(encodeURIComponent(JSON.stringify(params)))),async),xhr.send()}/* Chatbro Widget Embed Code End */ChatbroLoader({encodedChatId: '2CyX'});</script>
+</body>
+</html>
