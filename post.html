@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <title>Golos POST</title>
-<style>#map{width:100%;height:300px}#mapCanvas{width:100%;height:400px}input#postingkey{display:block;width:100%}input{margin:5px 0}p.help{background:#f9f9f9;color:#868686;padding:5px;border-radius:3px}.drdrop{padding:10px 0;border-radius:5px}body{font-family:Arial,Helvetica,sans-serif;color:grey}
+<style>
+body{margin: 0;padding: 0}
+#map{width:100%;height:300px}#mapCanvas{width:100%;height:400px}input#postingkey{display:block;width:100%}input{margin:5px 0}p.help{background:#f9f9f9;color:#868686;padding:5px;border-radius:3px}.drdrop{padding:10px 0;border-radius:5px}body{font-family:Arial,Helvetica,sans-serif;color:grey}
 #text-editor, input {
     background: #f7f7f7;
     border: 0;
@@ -13,7 +15,47 @@
     border-radius: 5px;
     width: 100%;
     font-size: 1.2rem;
-}#addimg.loading{background:url(https://s3.postimg.org/ejg32n7er/loading.gif);transition:2s all ease;height:50px}#addimg.loading.hasload{background:#36c77f;height:auto}input#topic{height:18px}.drdrop span{background:#7aa8ff;border:0;padding:10px;color:#fff;border-radius:3px;box-shadow:0 0 16px -7px #000;cursor:pointer}#text-editor img{max-width:100%;height:auto}#text-editor{background:#f7f7f7;min-height:200px;border-radius:5px;padding:1px 10px}.golos-form{padding:5%}#alerts{background: #e6e6e6; color: #777; font-size: 18px; border-radius: 3px; padding: 20px;}input#post-golos-title{width:100%;margin:10px auto;padding:5px;border-radius:5px;font-size:1rem}.golos-form .mce-panel{border-radius:3px;margin:10px auto}.golos-form input[type=submit]{cursor:pointer;background:#248eff;border:0;display:block;margin:20px auto;padding:10px;width:160px;border-radius:3px;color:#fff;box-shadow:0 0 10px -5px #000}</style>
+}#addimg.loading{background:url(https://s3.postimg.org/ejg32n7er/loading.gif);transition:2s all ease;height:50px}#addimg.loading.hasload{background:#36c77f;height:auto}input#topic{height:18px}.drdrop span{background:#7aa8ff;border:0;padding:10px;color:#fff;border-radius:3px;box-shadow:0 0 16px -7px #000;cursor:pointer}#text-editor img{max-width:100%;height:auto}#text-editor{background:#f7f7f7;min-height:200px;border-radius:5px;padding:1px 10px}.golos-form{padding:5%}
+#alerts {
+    color: #ff5e5e;
+    font-size: 18px;
+    border-radius: 3px;
+    padding: 20px;
+}
+input#post-golos-title {
+    width: 100%;
+    font-size: 2rem;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    border-bottom: 1px solid #cacaca;
+    border-radius: 0;
+}
+input#loadinp {
+	position: absolute;
+}
+header {
+    background: #7aa8ff;
+    color: white;
+    padding: 15px;
+    font-size: 8pt;
+	
+}
+footer#footer {
+    background: #2a2a2a;
+    color: white;
+}
+footer#footer a{
+    text-decoration: none;
+    color: white;
+}
+footer#footer ul{
+	list-style: none;
+}
+
+.golos-form .mce-panel{border-radius:3px;margin:10px auto}.golos-form input[type=submit]{cursor:pointer;background:#248eff;border:0;display:block;margin:20px auto;padding:10px;width:160px;border-radius:3px;color:#fff;box-shadow:0 0 10px -5px #000}</style>
 <meta name="Description" content="Мультиплатформенная публикация постов в голос + встроенный фотохостинг">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 <link rel="icon" type="image/x-icon" href="https://golos.io/images/favicons/favicon.ico"/>
@@ -22,21 +64,31 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
 
-<style>iframe#chat {width:80%; display:block;min-height: 300px; margin: 8px auto; border-radius: 3px; overflow: hidden; box-shadow: 0 0 12px -2px black; }</style>
+<style>iframe#chat {
+		width: 95%;
+		display: block;
+		min-height: 270px;
+		margin: 8px auto;
+		border-radius: 3px;
+		overflow: hidden;
+		box-shadow: 0 0 12px -2px #858585;
+		border: 0;
+	}</style>
 </head>
 <body>
+<header> <h2>Постинг в блокчейн голоса</h2>
+	<p>С помощью данной страницы вы можете записать в блокчейн голоса свой пост. В редактор встроен фотохостинг. Вы можете сохранить исходный код данной страницы
+	на свой пк/телефон и использовать локально.</p>
+	<strong>Поддерживается неограниченное число тегов и подмена имени приложения</strong>
+	<div id="credits">
+			Автор <a href="https://golos.io/@vik">@vik</a>.  Обратная связь - чат <a href="https://t.me/chain_cf">@chain_cf</a>
+			 
+			</div></header>
 <div class="golos-form">
- <h2>Постинг в блокчейн голоса</h2>
- <h3>С помощью данной страницы вы можете записать в блокчейн голоса свой пост. В редактор встроен фотохостинг. Вы можете сохранить исходный код данной страницы
- на свой пк/телефон и использовать локально.</h3>
-<div id="credits">
-Автор <a href="https://golos.io/@vik">@vik</a>.  Обратная связь - чат <a href="https://t.me/chain_cf">@chain_cf</a>
- 
-</div>
+
+
 <form id="post-golos-form" enctype="multipart/form-data">
-<h2>Публикация поста в блокчейн GOLOS</h2>
-<input type="username" autocomplete="username" id="username" name="username" required aria-required="true" placeholder="Логин">
-<input type="password" autocomplete="current-password" role="password" id="postingkey" name="postingkey" required aria-required="true" title="Никому не сообщайте свой ключ!" placeholder="Постинг ключ"/>
+
 
 
 
@@ -51,7 +103,9 @@
 <div id="text-editor"></div>
 
 
- 
+<input type="username" autocomplete="username" id="username" name="username" required aria-required="true" placeholder="Логин">
+<input type="password" autocomplete="current-password" role="password" id="postingkey" name="postingkey" required aria-required="true" title="Никому не сообщайте свой ключ!" placeholder="Постинг ключ"/>
+
 
 <p> <input type="text" id="tags" name="tags" placeholder="Теги"></p>
 <p>
@@ -68,6 +122,24 @@
 
 
 <iframe id="chat" src="https://chain.chatbro.com" sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
+	 
+<footer id="footer">
+		
+		<nav>
+		
+		<ul>
+		<li><a href="https://golos.cf/multisig/">📌 Управление мультисигом</a></li>
+		<li><a href="https://wiki.golos.io/2-rewards/delegatstvo.html">📌 О делегатстве на wiki.golos.io</a></li>
+		<li><a href="https://golos.io/~witnesses">📌 Голосование за делегатов golos.io/~witnesses</a> </li>
+		<li><a href="https://goldvoice.club/witnesses/">📌 Голосование за делегатов goldvoice.club/witnesses</a></li>
+		<li><a href="https://golos.cf/reg.html">📌 Регистрация на голосе без смс верификации</a></li>
+		<li><a href="https://golos.cf/steem">📌 Регистрация на steemit без смс верификации</a></li>
+		<li><a href="https://golos.cf/proxy">📌 Проксирование голосования за делегатов</a></li>
+		<li><a href="https://golos.cf">📌 Нода wss://api.golos.cf</a></li>
+		<li><a href="https://golos.io/@vik">📌 Блог @vik</a></li>
+		</ul></nav>
+		<div id="loader"><button onclick="sendReturn()">Остановить поиск</button><div id="progress"></div></div>
+		</footer>
 <script>
 	 
 			 
@@ -189,17 +261,6 @@ window.ondragover = function(e) {e.preventDefault()}
         xhr.setRequestHeader('Authorization', 'Client-ID 28aaa2e823b03b1'); 
         xhr.send(fd);
     }
-var s;	
-
-
-if("postK" in localStorage){
-    document.getElementById('postingkey').placeholder = 'Ваш постинг ключ был введен ранее, сейчас зашифрован и сохранен';
-} else {
-   
-}
-
-
-// Запускаем функцию нажатием submit в форме #post-golos-form
 jQuery( '#post-golos-form' ).on( 'submit', function(e) {
         e.preventDefault();
  var posttitle = document.getElementById("post-golos-title").value,
