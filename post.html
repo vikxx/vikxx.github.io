@@ -3,7 +3,17 @@
 <head>
 <meta charset="utf-8"/>
 <title>Golos POST</title>
-<style>#map{width:100%;height:300px}#mapCanvas{width:100%;height:400px}input#postingkey{display:block;width:100%}input{margin:5px 0}p.help{background:#f9f9f9;color:#868686;padding:5px;border-radius:3px}.drdrop{padding:10px 0;border-radius:5px}body{font-family:Arial,Helvetica,sans-serif;color:grey}#text-editor,input{background:#f7f7f7;border:0;box-shadow:inset 0 0 10px -5px #000;color:#000;padding:5px;border-radius:5px}input#permlink,input#topic{font-size:15px;padding:0 10px;border-radius:30px 0}input#permlink{height:18px;margin-right:10px}#addimg.loading{background:url(https://s3.postimg.org/ejg32n7er/loading.gif);transition:2s all ease;height:50px}#addimg.loading.hasload{background:#36c77f;height:auto}input#topic{height:18px}.drdrop span{background:#7aa8ff;border:0;padding:10px;color:#fff;border-radius:3px;box-shadow:0 0 16px -7px #000;cursor:pointer}#text-editor img{max-width:100%;height:auto}#text-editor{background:#f7f7f7;min-height:200px;border-radius:5px;padding:1px 10px}.golos-form{padding:5%}#alerts{background: #e6e6e6; color: #777; font-size: 18px; border-radius: 3px; padding: 20px;}input#post-golos-title{width:100%;margin:10px auto;padding:5px;border-radius:5px;font-size:1rem}.golos-form .mce-panel{border-radius:3px;margin:10px auto}.golos-form input[type=submit]{cursor:pointer;background:#248eff;border:0;display:block;margin:20px auto;padding:10px;width:160px;border-radius:3px;color:#fff;box-shadow:0 0 10px -5px #000}</style>
+<style>#map{width:100%;height:300px}#mapCanvas{width:100%;height:400px}input#postingkey{display:block;width:100%}input{margin:5px 0}p.help{background:#f9f9f9;color:#868686;padding:5px;border-radius:3px}.drdrop{padding:10px 0;border-radius:5px}body{font-family:Arial,Helvetica,sans-serif;color:grey}
+#text-editor, input {
+    background: #f7f7f7;
+    border: 0;
+    box-shadow: inset 0 0 10px -5px #000;
+    color: #000;
+    padding: 5px;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 1.2rem;
+}#addimg.loading{background:url(https://s3.postimg.org/ejg32n7er/loading.gif);transition:2s all ease;height:50px}#addimg.loading.hasload{background:#36c77f;height:auto}input#topic{height:18px}.drdrop span{background:#7aa8ff;border:0;padding:10px;color:#fff;border-radius:3px;box-shadow:0 0 16px -7px #000;cursor:pointer}#text-editor img{max-width:100%;height:auto}#text-editor{background:#f7f7f7;min-height:200px;border-radius:5px;padding:1px 10px}.golos-form{padding:5%}#alerts{background: #e6e6e6; color: #777; font-size: 18px; border-radius: 3px; padding: 20px;}input#post-golos-title{width:100%;margin:10px auto;padding:5px;border-radius:5px;font-size:1rem}.golos-form .mce-panel{border-radius:3px;margin:10px auto}.golos-form input[type=submit]{cursor:pointer;background:#248eff;border:0;display:block;margin:20px auto;padding:10px;width:160px;border-radius:3px;color:#fff;box-shadow:0 0 10px -5px #000}</style>
 <meta name="Description" content="Мультиплатформенная публикация постов в голос + встроенный фотохостинг">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 <link rel="icon" type="image/x-icon" href="https://golos.io/images/favicons/favicon.ico"/>
@@ -29,12 +39,9 @@
 
 
 <input type="password" id="postingkey" name="postingkey" title="Никому не сообщайте свой ключ!" placeholder="Постинг ключ"/>
+<h2><input type="text" name="post-golos-title" id="post-golos-title" required aria-required="true" placeholder="Заголовок"></h2>
+	
 
-
-
-
-<h2>		    <input type="text" name="post-golos-title" id="post-golos-title" required aria-required="true" placeholder="Заголовок"></h2>
-	<p>golos.io/<input title="Допускаются только латинские маленькие буквы или дефис" type="text" id="topic" name="topic" required aria-required="true" placeholder="Топик. (Например 'фото')" /><input type="text" id="permlink" name="permlink" required aria-required="true" placeholder="'хвост' ссылки. " pattern="[a-z0-9-]+"/></p>
 	   
 			
 
@@ -44,17 +51,14 @@
 
  
 
-<p> <input type="text" id="tag1" name="tag1" placeholder="Тег 1" >
-<input type="text" id="tag2" name="tag2"  placeholder="Тег 2" >
-<input type="text" id="tag3" name="tag3"  placeholder="Тег 3" >	</p>
-
-<p><input type="text" id="tag4" name="tag4" placeholder="Тег 4" >
-<input type="text" id="tag5" name="tag5"  placeholder="Тег 5" >
-<input type="text" id="tag6" name="tag6"  placeholder="Тег 6" >	</p>	
-
-<p><input type="text" id="tag7" name="tag7" placeholder="Тег 7" >
-<input type="text" id="tag8" name="tag8"  placeholder="Тег 8" >
-<input type="text" id="tag9" name="tag9"  placeholder="Тег 9" >	</p>	
+<p> <input type="text" id="tags" name="tags" placeholder="Теги"></p>
+<p>
+Введите окончание ссылки на ваш пост. Например если вы введете слово about-me , ссылка на пост будет вида golos.io/тег/@имя/<b>about-me</b>.</br>
+Важно! Ссылка должна быть уникальной для вашего блога, если ввести существующую - произойдет замена поста по этой ссылки (редактирование).	
+<input type="text" id="permlink" name="permlink" required aria-required="true" placeholder="permlink / короткая ссылка" pattern="[a-z0-9-]+"/></p>
+<p> 
+Имя приложения. Вы можете ввести любое имя приложения и имитировать постинг через golos.io, goldvoice, steepshot и т.д.	
+<input type="text" id="appname" name="appname" placeholder="Имя приложения для подмены"></p>	
 		<input type="submit" value="Отправить">
 </form>
 <div id="alerts"></div>
@@ -184,7 +188,7 @@ window.ondragover = function(e) {e.preventDefault()}
         xhr.send(fd);
     }
 var s;	
-var tag1= "",tag2="",tag3="",tag4="",tag5="",tag6="",tag7="",tag8="",tag9="";
+
 
 if("postK" in localStorage){
     document.getElementById('postingkey').placeholder = 'Ваш постинг ключ был введен ранее, сейчас зашифрован и сохранен';
@@ -197,12 +201,15 @@ if("postK" in localStorage){
 jQuery( '#post-golos-form' ).on( 'submit', function(e) {
         e.preventDefault();
 		// Записываем в переменные содержимое полей
-		 var t = document.getElementById("post-golos-title").value,
+		 var posttitle = document.getElementById("post-golos-title").value,
 			 // Вытаскиваем наш контент из редактора в переменную post_body
 			 post_body = tinyMCE.activeEditor.getContent(),
-			 u = document.getElementById("username").value;
+			 u = document.getElementById("username").value,
+			 appname = document.getElementById("appname").value;
 			
-			steem.api.getAccounts([u], function(err, result) {
+			golos.api.getAccounts([u], function(err, result) {
+				if(err)return alert('Аккаунт не найден')
+				
 				s = result[0].memo_key;
 			
 			postingKey = document.getElementById("postingkey").value;
@@ -220,53 +227,26 @@ jQuery( '#post-golos-form' ).on( 'submit', function(e) {
 			var k = sjcl.decrypt(s, enK);
 			
 			
-			 permlink = document.getElementById("permlink").value,
-			 tag1 = document.getElementById("tag1").value,
-			 tag2 = document.getElementById("tag2").value,
-			 tag3 = document.getElementById("tag3").value,
-			 tag4 = document.getElementById("tag4").value,
-			 tag5 = document.getElementById("tag5").value,
-			 tag6 = document.getElementById("tag6").value,
-			 tag7 = document.getElementById("tag7").value,
-			 tag8 = document.getElementById("tag8").value,
-			 tag9 = document.getElementById("tag9").value;
-			 
-			  var rutag1 = transform(tag1, "-");
-			 var rutag2 = transform(tag2, "-");
-			 var rutag3  =transform(tag3, "-");
-			 var rutag4 =transform(tag4, "-");
-			 var rutag5 =transform(tag5, "-");
-			 var rutag6 =transform(tag6, "-");
-			 var rutag7 =transform(tag7, "-");
-			 var rutag8 =transform(tag8, "-");
-			 var rutag9 =transform(tag9, "-"); 
-			 var rutag9 =transform(tag9, "-");
-			 var rutopic = document.getElementById("topic").value;
-			 var topic = transform(rutopic, "-");
+			var permlink = document.getElementById("permlink").value,
+			 t = document.getElementById("tags").value,
+			 tagspace = t.toLowerCase().replace(/,/g,' ').replace(/  /g,' '),
+             tagsraw = tagspace.split(' '),
+             tags = [];
+              for(tag of tagsraw){
+               tags.push(cyrTag().transform(t, "-"))
+              }
+			
 			 
 			 
-			 //tags = document.getElementById("tags").value,
-			 jsonMetadata = {"app":"chain.cf/post.html from vik", "tags":[rutag1,rutag2,rutag3,rutag4,rutag5,rutag6,rutag7,rutag8,rutag9]},
-			 parentAuthor = '', 
-	         parentPermlink = topic;
-			 steem.broadcast.comment(
-					k,parentAuthor, parentPermlink, 
-						u, 
-						permlink, 
-						t, 
-						post_body, 
-					jsonMetadata, 
-					function(err, result) {
+			var jsonMetadata = {"app":appname, "tags":[tags]},
+			parentPermlink = tags[0];
+		 console.log(parentPermlink,u,permlink,posttitle, post_body, jsonMetadata)
+
+		 golos.broadcast.comment(k,'', parentPermlink,u,permlink,posttitle, post_body, jsonMetadata, function(err, result) {
 					  console.log(err,result);
-					  // В случае ошибок - отразим их под формой
-					  if(err != null){
-					  document.getElementById('alerts').innerHTML = ('<blockquote>'+err+'</blockquote>'); 
-					  }
-					  if(result != null){
-					  document.getElementById('alerts').innerHTML = ('<blockquote>Ошибок не выявлено, проверьте наличие поста - <a href="http://golosd.com/@'+u+'">golosd.com/@'+u+'</a>. Что бы отредактировать пост - просто нажмите кнопку отправить еще раз - это заменит содержимое поста на текущее содержимое редактора, важно, что бы вы не меняли ссылку "'+permlink+'". Заменив ссылку - будет создан новый пост, вместо редакции существующего</blockquote>'); 
-					  }
-					  
-					});
+			if(err)return document.getElementById('alerts').innerHTML = ('<blockquote>Ошибка! '+err+'</blockquote>'); 
+					  document.getElementById('alerts').innerHTML = ('<blockquote>Пост размещен!</blockquote>'); 
+			});
 		});			
 });
 
