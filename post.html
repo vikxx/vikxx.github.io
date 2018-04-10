@@ -18,10 +18,10 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 <link rel="icon" type="image/x-icon" href="https://golos.io/images/favicons/favicon.ico"/>
 <script>var indexPage=false,isBlog=false;</script>
-<script src="https://unpkg.com/golos-js@0.6.3/dist/golos.min.js"></script>
+<script src="https://unpkg.com/golos-js@0.6.2/dist/golos.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sjcl/1.0.6/sjcl.min.js"></script>
+
 <style>iframe#chat {width:80%; display:block;min-height: 300px; margin: 8px auto; border-radius: 3px; overflow: hidden; box-shadow: 0 0 12px -2px black; }</style>
 </head>
 <body>
@@ -34,11 +34,13 @@
  
 </div>
 <form id="post-golos-form" enctype="multipart/form-data">
-<h2>Опубликовать пост в голосе</h2>
-<input type="text" id="username" name="username" required aria-required="true" placeholder="Логин">
+<h2>Публикация поста в блокчейн GOLOS</h2>
+<input type="username" autocomplete="username" id="username" name="username" required aria-required="true" placeholder="Логин">
+<input type="password" autocomplete="current-password" role="password" id="postingkey" name="postingkey" required aria-required="true" title="Никому не сообщайте свой ключ!" placeholder="Постинг ключ"/>
 
 
-<input type="password" id="postingkey" name="postingkey" title="Никому не сообщайте свой ключ!" placeholder="Постинг ключ"/>
+
+
 <h2><input type="text" name="post-golos-title" id="post-golos-title" required aria-required="true" placeholder="Заголовок"></h2>
 	
 
@@ -200,54 +202,36 @@ if("postK" in localStorage){
 // Запускаем функцию нажатием submit в форме #post-golos-form
 jQuery( '#post-golos-form' ).on( 'submit', function(e) {
         e.preventDefault();
-		// Записываем в переменные содержимое полей
-		 var posttitle = document.getElementById("post-golos-title").value,
-			 // Вытаскиваем наш контент из редактора в переменную post_body
-			 post_body = tinyMCE.activeEditor.getContent(),
-			 u = document.getElementById("username").value,
+ var posttitle = document.getElementById("post-golos-title").value,
+	post_body = tinyMCE.activeEditor.getContent(),
+			 author = document.getElementById("username").value,
 			 appname = document.getElementById("appname").value;
+			 wif = document.getElementById("postingkey").value;
 			
-			golos.api.getAccounts([u], function(err, result) {
-				if(err)return alert('Аккаунт не найден')
-				
-				s = result[0].memo_key;
 			
-			postingKey = document.getElementById("postingkey").value;
-			
-			if (postingKey.length > 20){
-			//encryption
-			postK = sjcl.encrypt(s, postingKey);
-
-			//storing to local storage
-			localStorage.setItem("postK", postK);
-			}
-			// retrieve from local storage
-			var enK = localStorage.getItem("postK");
-			// decrypt
-			var k = sjcl.decrypt(s, enK);
 			
 			
 			var permlink = document.getElementById("permlink").value,
-			 t = document.getElementById("tags").value,
-			 tagspace = t.toLowerCase().replace(/,/g,' ').replace(/  /g,' '),
+			 tgs = document.getElementById("tags").value,
+			 tagspace = tgs.toLowerCase().replace(/,/g,' ').replace(/  /g,' '),
              tagsraw = tagspace.split(' '),
              tags = [];
               for(tag of tagsraw){
-               tags.push(cyrTag().transform(t, "-"))
+               tags.push(transform(tag, "-"))
               }
 			
 			 
 			 
 			var jsonMetadata = {"app":appname, "tags":[tags]},
 			parentPermlink = tags[0];
-		 console.log(parentPermlink,u,permlink,posttitle, post_body, jsonMetadata)
+		 console.log(parentPermlink,author,permlink,posttitle, post_body, jsonMetadata)
 
-		 golos.broadcast.comment(k,'', parentPermlink,u,permlink,posttitle, post_body, jsonMetadata, function(err, result) {
+		 golos.broadcast.comment(wif,'', parentPermlink,author,permlink,posttitle, post_body, jsonMetadata, function(err, result) {
 					  console.log(err,result);
 			if(err)return document.getElementById('alerts').innerHTML = ('<blockquote>Ошибка! '+err+'</blockquote>'); 
 					  document.getElementById('alerts').innerHTML = ('<blockquote>Пост размещен!</blockquote>'); 
 			});
-		});			
+		
 });
 
     
