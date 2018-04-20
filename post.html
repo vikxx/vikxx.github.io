@@ -586,7 +586,7 @@ jQuery('#post-golos-form').on('submit', function(e) {
 
     if (!permlink) {
         permlink = transform(posttitle, "-"),
-            permlink = permlink.replace(/--/g, '-')
+            permlink = permlink.replace(/--/g, '-').replace(/[^a-z0-9-]+/gi, '');
     }
 
 
