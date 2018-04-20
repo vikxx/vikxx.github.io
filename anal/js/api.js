@@ -185,7 +185,7 @@ if ("FLAG" in localStorage) {
     buildChart(JSON.parse(ch), "flag-container", "График взаимодействия ФЛАГОВ. (Для обновления проанализируйте аккаунт снова)")
 } else buildChart(FallbackFLAG, "flag-container", "График входящих/исходящих флагов аккаунта @vik");
 var getStat = function t(e) {
-    steem.api.getAccountHistory(account, e, l, function(o, a) {
+    golos.api.getAccountHistory(account, e, l, function(o, a) {
         o && console.log(o);
 		
 	
