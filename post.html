@@ -147,6 +147,94 @@ input#username, input#postingkey {
 input#postingkey {
     float: right;
 }
+aside {
+    background: #18264e;
+    width: 270px;
+    padding: 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    box-shadow: 0 0 10px -2px #3c3c3c;
+    overflow: auto;
+}
+aside a {
+    text-decoration: none;
+    color: white;
+}
+aside ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 8pt;
+}
+aside ul li {
+    border-bottom: 1px solid #253562;
+    padding: 10px 0;
+}
+.golos-form {
+    padding: 15px;
+    
+}
+header,footer,.golos-form{
+    margin-left: 300px;
+}
+    
+aside nav ul li span {
+    color: white;
+    cursor: pointer;
+}
+.postedit {
+    display: none;
+    position: fixed;
+    z-index: 200;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    background: #131924f7;
+    width: 100%;
+
+    height: 100vh;
+}
+
+.postedit button {
+    background: #2f9eff;
+    color: white;
+    border: 0;
+    padding: 6.5px;
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 5px;
+    width: 18%;
+}
+.postedit-wrap {
+    display: block;
+    margin: 0 auto;
+    width: 90%;
+    color: white;
+}
+.postedit h4 {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 200;
+    margin-top: 100px;
+}
+input#postediturl {
+    font-size: 10pt;
+    margin: 0 auto;
+    display: inline;
+    width: 80%;
+    background: white;
+}
+.postedit .fa-close {
+    color: red;
+    float: right;
+    padding: 10px;
+    font-size: 30px;
+    cursor: pointer;
+}
 @media only screen and (max-width:780px) {
     input#username, input#postingkey {
     width: 100%;
@@ -154,12 +242,32 @@ input#postingkey {
     float: none;
     font-size: 1rem;
 }
+
+input#postediturl,
+.postedit button {
+    width: 100%;
+    margin-top: 10px;
+}
+header, footer, .golos-form {
+    margin: 0;
+}
+aside {
+    background: #2a2a2a;
+    padding: 15px;
+    top: 0;
+    left: 0;
+    height: auto;
+    box-shadow: 0 0 10px -2px #3c3c3c;
+    overflow: auto;
+    position: relative;
+    width: auto;
+}
+
 }
 </style>
 <meta name="Description" content="Мультиплатформенная публикация постов в голос + встроенный фотохостинг">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 <link rel="icon" type="image/x-icon" href="https://golos.io/images/favicons/favicon.ico"/>
-<script>var indexPage=false,isBlog=false;</script>
 <script src="https://unpkg.com/golos-js@0.6.3/dist/golos.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
@@ -172,7 +280,7 @@ input#postingkey {
 		margin: 8px auto;
 		border-radius: 3px;
 		overflow: hidden;
-		box-shadow: 0 0 12px -2px #858585;
+		box-shadow: 0 0 12px -2px black;
 		border: 0;
 	}</style>
 </head>
@@ -184,8 +292,9 @@ input#postingkey {
 	<div id="credits">
 			Автор <a href="https://golos.io/@vik">@vik</a>.  Обратная связь - чат <a href="https://t.me/chain_cf">@chain_cf</a>
 			 
-			</div></header>
-<div class="golos-form">
+            </div></header>
+
+<section class="golos-form">
 
 
 <form id="post-golos-form" enctype="multipart/form-data">
@@ -195,7 +304,7 @@ input#postingkey {
 
 
 
-<p> <input type="text" id="tags" name="tags" placeholder="Теги"></p>
+<p> <input type="text" id="tags" name="tags" placeholder="теги"></p>
 <div class="openExt">
 		
 	<strong>Расширенные опции - нажмите тут чтобы настроить режим выплаты и бенефициаров <i class="fa fa-caret-down"></i></strong></div> 
@@ -206,12 +315,12 @@ input#postingkey {
                 <input type="text" id="permlink" name="permlink" placeholder="permlink / короткая ссылка" pattern="[a-z0-9-]+"/></p>
                 <p> 
                 Имя приложения. Вы можете ввести любое имя приложения и имитировать постинг через golos.io, goldvoice, steepshot и т.д.	
-                <input type="text" id="appname" name="appname" placeholder="Имя приложения для подмены"></p>	
+                <input type="text" id="appname" autocomplete="appname" name="appname" placeholder="Имя приложения для подмены"></p>	
                 <hr>
                        
                 <p>Бенефициары.</p>
                 Пример ввода настройки. Вес указывается из расчета 100% = 10000, 50% = 5000, 10% = 1000 и т.д.
-                <code>[ {"account": "vik","weight": 1000} , {"account": "degradant","weight": 500 } ]</code>
+                <code>[ {"account": "vik","weight": 500} , {"account": "netfriend","weight": 500 } ]</code>
                 <textarea id="benics"></textarea>
                 
                 <input type="checkbox" id="Allinpower" name="Allinpower" value="off">
@@ -228,30 +337,46 @@ input#postingkey {
 <input type="submit" value="Отправить">
 </form>
 <div id="alerts"></div>
+
+<div class="postedit">
+        <i class="fa fa-close"></i>
+<div class="postedit-wrap">
+    
+    <h4>Введите ссылку на пост который хотите отредактировать и нажмите "загрузить в редактор"</h4>
+    <code>Пример ссылки golos.io/tag/@vik/md</code>
+    <input type="text" id="postediturl" name="postedit" placeholder="Ссылка на пост для редактирования">
+    <button id="load4edit">Загрузить в редактор</button>
+
 </div>
-
-
-<iframe id="chat" src="https://chain.chatbro.com" sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
-	 
-<footer id="footer">
-		
-		<nav>
-		
-		<ul>
+</div>
+</section>
+<aside>
+<nav>
+<ul>
+        <li><span id="editpost"><i class="fa fa-code"></i>  Редактировать посты</span></li>
+        <li><a href="https://t.me/chain_cf">📌 Тех.поддержка</a></li>
+        <li><a href="https://t.me/viknews">📌 Новости</a></li>    
+        <li><a href="https://golos.io/@vik">📌 Блог @vik</a></li>
 		<li><a href="https://golos.cf/multisig/">📌 Управление мультисигом</a></li>
-		<li><a href="https://wiki.golos.io/2-rewards/delegatstvo.html">📌 О делегатстве на wiki.golos.io</a></li>
-		<li><a href="https://golos.io/~witnesses">📌 Голосование за делегатов golos.io/~witnesses</a> </li>
-		<li><a href="https://goldvoice.club/witnesses/">📌 Голосование за делегатов goldvoice.club/witnesses</a></li>
-		<li><a href="https://golos.cf/reg.html">📌 Регистрация на голосе без смс верификации</a></li>
+	
+    	<li><a href="https://golos.cf/reg">📌 Регистрация на голосе без смс верификации</a></li>
 		<li><a href="https://golos.cf/steem">📌 Регистрация на steemit без смс верификации</a></li>
 		<li><a href="https://golos.cf/proxy">📌 Проксирование голосования за делегатов</a></li>
-		<li><a href="https://golos.cf">📌 Нода wss://api.golos.cf</a></li>
-		<li><a href="https://golos.io/@vik">📌 Блог @vik</a></li>
-		</ul></nav>
-	
+		
+</ul>
+</nav>
+</aside>
+
+
+
+	 
+<footer id="footer">
+    <iframe id="chat" src="https://chain.chatbro.com" sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
 		</footer>
 <script>
+        golos.config.set('websocket','wss://api.golos.cf');
 var tryAgain = "Ошибка чтения данных с ноды, повторите еще раз!";
+var FixParentPermForEdit = false;
 var assoc = {
     "а": "a",
     "б": "b",
@@ -341,7 +466,7 @@ var MD = new SimpleMDE({
         link: ["[", "](http://)"],
         table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"],
     },
-    lineWrapping: false,
+
     parsingConfig: {
         allowAtxHeaderWithoutSpace: true,
         strikethrough: false,
@@ -375,8 +500,49 @@ var MD = new SimpleMDE({
 });
 jQuery(document).ready(function($) {
     $(".openExt").click(function() {
-        $('#extend').fadeIn();
+        $('#extend').fadeIn()
     });
+    
+
+    $(".postedit .fa-close").click(function() {
+        $('.postedit').fadeOut();
+    });
+
+    $("#editpost").click(function() {
+        $('.postedit').fadeIn();
+    });
+    $("#load4edit").click(function() {
+        
+        var editUrl = document.getElementById("postediturl").value.toLowerCase();
+        if(!editUrl)return alert('Введите ссылку!');
+        var urlPrepare = editUrl.split("@");
+         urlPrepare = urlPrepare[1].split("/")
+        var Permlink = urlPrepare[1].replace('/','').replace(/ /g,'');
+        var Author = urlPrepare[0].replace(/ /g,'');
+        if(!Author||!Permlink)return alert('Ссылка не действительна!')
+        
+        golos.api.getContent(Author, Permlink, function(err, result) {
+            if(err)return alert('Не найден пост ',Author, Permlink);
+        console.log(result);
+
+        var jmeta = JSON.parse(result.json_metadata);
+       
+        $('#post-golos-title').val(result.title);
+        $('#tags').val(jmeta.tags.join(' '));
+        $('#appname').val(jmeta.app);
+        $('#permlink').val(result.permlink);
+        $('#username').val(result.author);
+        FixParentPermForEdit = jmeta.tags[0];
+        MD.value(result.body);
+        $('#permlink').fadeOut();
+        $('.postedit').fadeOut();
+
+        });
+
+    });
+
+
+
 });
 
 var featuredImage = [];
@@ -439,9 +605,9 @@ jQuery('#post-golos-form').on('submit', function(e) {
             "app": appname,
             "format": "markdown",
             "tags": tags,
-            "images": featuredImage
+            "image": featuredImage
         },
-        parentPermlink = tags[0];
+        parentPermlink =(FixParentPermForEdit)?FixParentPermForEdit:tags[0];
     var beneficiaries = document.getElementById("benics").value;
     var Allinpower = document.getElementById("Allinpower").checked;
     var declinePayout = document.getElementById("declinePayout").checked;
@@ -491,7 +657,7 @@ jQuery('#post-golos-form').on('submit', function(e) {
             var refBlockNum = taposBlock - 1 & 0xffff;
             var refBlockPrefix = parseInt(hex, 16)
 
-            console.log(n, hex, refBlockNum, refBlockPrefix)
+           
             var trx = {
                 "expiration": expire,
                 "extensions": [],
