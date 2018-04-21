@@ -78,7 +78,7 @@ header {
     background: #7aa8ff;
     color: white;
     padding: 15px;
-    font-size: 8pt;
+    font-size: 9pt;
 	
 }
 footer#footer {
@@ -107,7 +107,7 @@ input#Allinpower,input#declinePayout {
 #extend{display: none;
     background: #fafafa;
     padding: 15px;
-	font-size: 8pt;
+	font-size: 9pt;
     border-radius: 5px;
     margin: 10px auto;
     overflow: hidden;
@@ -120,10 +120,13 @@ input#Allinpower,input#declinePayout {
     color: #40dc46;
     border-radius: 3px;
 }
+input#golosnode {
+    font-size: 10pt;
+}
 .openExt {
     display: block;
     text-align: center;
-    font-size: 8pt;
+    font-size: 9pt;
     background: #fafafa;
     color: black;
     padding: 10px;
@@ -132,6 +135,13 @@ input#Allinpower,input#declinePayout {
 img{
     max-width: 100%!important;
     height: auto;
+}
+input#benevik {
+    float: left;
+    width: 20px;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
 }
 .golos-form .mce-panel{border-radius:3px;margin:10px auto}.golos-form input[type=submit]{cursor:pointer;background:#248eff;border:0;display:block;margin:20px auto;padding:10px;width:160px;border-radius:3px;color:#fff;box-shadow:0 0 10px -5px #000}
 
@@ -166,7 +176,7 @@ aside ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    font-size: 8pt;
+    font-size: 9pt;
 }
 aside ul li {
     border-bottom: 1px solid #253562;
@@ -179,7 +189,14 @@ aside ul li {
 header,footer,.golos-form{
     margin-left: 300px;
 }
-    
+p.benevik {
+    background: #3cc0ad;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 10pt;
+    font-weight: 700;
+}
 aside nav ul li span {
     color: white;
     cursor: pointer;
@@ -305,13 +322,16 @@ aside {
 
 
 <p> <input type="text" id="tags" name="tags" placeholder="теги"></p>
+
+<p class="benevik"><input type="checkbox" id="benevik" name="benevik" value="on" checked>
+<label for="benevik">💯 Установить vik и netfriend в бенефициары. Это даст 100% upvote при публикации. Бенефактор 10%+10%</label></p>
 <div class="openExt">
 		
-	<strong>Расширенные опции - нажмите тут чтобы настроить режим выплаты и бенефициаров <i class="fa fa-caret-down"></i></strong></div> 
+<strong>Расширенные опции - нажмите тут чтобы настроить режим выплаты и бенефициаров <i class="fa fa-caret-down"></i></strong></div> 
 <div id="extend">
         <p>
-                Введите окончание ссылки на ваш пост. Например если вы введете слово about-me , ссылка на пост будет вида golos.io/тег/@имя/<b>about-me</b>.</br>
-                Важно! Ссылка должна быть уникальной для вашего блога, если ввести существующую - произойдет замена поста по этой ссылки (редактирование).	
+                При желании вы можете задать permlink поста. Это не обязательно.</br>
+                Важно! Permlink должен быть уникальным для вашего блога, если ввести существующий - произойдет не создание поста, а редактирование прежнего поста с таким permlink.	
                 <input type="text" id="permlink" name="permlink" placeholder="permlink / короткая ссылка" pattern="[a-z0-9-]+"/></p>
                 <p> 
                 Имя приложения. Вы можете ввести любое имя приложения и имитировать постинг через golos.io, goldvoice, steepshot и т.д.	
@@ -320,7 +340,8 @@ aside {
                        
                 <p>Бенефициары.</p>
                 Пример ввода настройки. Вес указывается из расчета 100% = 10000, 50% = 5000, 10% = 1000 и т.д.
-                <code>[ {"account": "vik","weight": 500} , {"account": "netfriend","weight": 500 } ]</code>
+                <code>[ {"account": "vik","weight": 1000} , {"account": "netfriend","weight": 1000 } ]</code>
+                <b>Вы можете рассчитывать на апвот от @vik если используете шаблон выше. Подробнее в <a target="_blank" href="https://t.me/cryptoporn">чате поддержки</a></b>
                 <textarea id="benics"></textarea>
                 
                 <input type="checkbox" id="Allinpower" name="Allinpower" value="off">
@@ -357,14 +378,16 @@ aside {
         <li><a href="https://t.me/chain_cf">📌 Тех.поддержка</a></li>
         <li><a href="https://t.me/viknews">📌 Новости</a></li>    
         <li><a href="https://golos.io/@vik">📌 Блог @vik</a></li>
-		<li><a href="https://golos.cf/multisig/">📌 Управление мультисигом</a></li>
+		<li><a href="https://golos.cf/multisig/">📌 Управление мультисиг</a></li>
 	
-    	<li><a href="https://golos.cf/reg">📌 Регистрация на голосе без смс верификации</a></li>
-		<li><a href="https://golos.cf/steem">📌 Регистрация на steemit без смс верификации</a></li>
-		<li><a href="https://golos.cf/proxy">📌 Проксирование голосования за делегатов</a></li>
+    	<li><a href="https://golos.cf/reg">📌 Аккаунт на голосе без смс</a></li>
+		<li><a href="https://golos.cf/steem">📌 Аккаунт на steemit без смс</a></li>
+		<li><a href="https://golos.cf/proxy">📌 Проксирование witness vote</a></li>
 		
 </ul>
 </nav>
+
+<input title="Укажите адрес ноды через которую хотите размещать пост" type="text" id="golosnode" name="golosnode" placeholder="wss://api.golos.cf">
 </aside>
 
 
@@ -374,7 +397,7 @@ aside {
     <iframe id="chat" src="https://chain.chatbro.com" sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
 		</footer>
 <script>
-        golos.config.set('websocket','wss://api.golos.cf');
+
 var tryAgain = "Ошибка чтения данных с ноды, повторите еще раз!";
 var FixParentPermForEdit = false;
 var assoc = {
@@ -512,7 +535,8 @@ jQuery(document).ready(function($) {
         $('.postedit').fadeIn();
     });
     $("#load4edit").click(function() {
-        
+
+        golos.config.set('websocket','wss://ws.golos.io');  
         var editUrl = document.getElementById("postediturl").value.toLowerCase();
         if(!editUrl)return alert('Введите ссылку!');
         var urlPrepare = editUrl.split("@");
@@ -576,17 +600,21 @@ function upload(file) {
 }
 jQuery('#post-golos-form').on('submit', function(e) {
     e.preventDefault();
+
+
+
     var posttitle = document.getElementById("post-golos-title").value,
+        wssgolos = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://api.golos.cf',
         post_body = MD.value(),
         author = document.getElementById("username").value.toLowerCase().replace(/@/g, ''),
-        appname = document.getElementById("appname").value,
+        appname = (document.getElementById("appname").value)?document.getElementById("appname").value:'@vik',
         wif = document.getElementById("postingkey").value;
     var permlink = document.getElementById("permlink").value.toLowerCase().replace(/\,/g, '-').replace(/\./g, '-');
-
+    golos.config.set('websocket',wssgolos);
 
     if (!permlink) {
-        permlink = transform(posttitle, "-"),
-            permlink = permlink.replace(/--/g, '-').replace(/[^a-z0-9-]+/gi, '');
+            permlink = transform(posttitle, "-"),
+            permlink = permlink.replace(/[^a-z0-9-]+/gi, '');
     }
 
 
@@ -612,11 +640,17 @@ jQuery('#post-golos-form').on('submit', function(e) {
     var Allinpower = document.getElementById("Allinpower").checked;
     var declinePayout = document.getElementById("declinePayout").checked;
 
+    
+
     var beneficiariesObj = [
         [0, {
             "beneficiaries": (beneficiaries) ? JSON.parse(beneficiaries) : ""
         }]
     ];
+    if(document.getElementById("benevik").checked){
+      beneficiariesObj = [[0,{"beneficiaries":[{"account":"vik","weight":1000},{"account":"netfriend","weight":1000}]}]];
+      beneficiaries = true
+    }
     var newTx = [
         ["comment", {
             "parent_author": "",
@@ -679,12 +713,13 @@ jQuery('#post-golos-form').on('submit', function(e) {
             }
             console.log(JSON.stringify(trxs))
 
-            golos.api.broadcastTransactionSynchronous(trxs, function(err, result) {
+
+
+         golos.api.broadcastTransactionSynchronous(trxs, function(err, result) {
                 console.log(err, result);
                 if (err) return document.getElementById('alerts').innerHTML = ('<blockquote>Ошибка! ' + err + '</blockquote>');
                 document.getElementById('alerts').innerHTML = ('<blockquote>Пост размещен!</blockquote>');
             });
-
         });
     });
 
