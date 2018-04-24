@@ -398,7 +398,7 @@ aside {
 		</footer>
 <script>
 
-var tryAgain = "Ошибка чтения данных с ноды, повторите еще раз!";
+var tryAgain = "Ошибка чтения данных с ноды, подождите несколько секунд и нажмите отправить еще раз или укажите другой адрес ноды!";
 var FixParentPermForEdit = false;
 var assoc = {
     "а": "a",
@@ -604,7 +604,7 @@ jQuery('#post-golos-form').on('submit', function(e) {
 
 
     var posttitle = document.getElementById("post-golos-title").value,
-        wssgolos = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://api.golos.cf',
+        wssgolos = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://ws.golos.io',
         post_body = MD.value(),
         author = document.getElementById("username").value.toLowerCase().replace(/@/g, ''),
         appname = (document.getElementById("appname").value)?document.getElementById("appname").value:'@vik',
@@ -648,7 +648,7 @@ jQuery('#post-golos-form').on('submit', function(e) {
         }]
     ];
     if(document.getElementById("benevik").checked){
-      beneficiariesObj = [[0,{"beneficiaries":[{"account":"vik","weight":1000},{"account":"netfriend","weight":1000}]}]];
+      beneficiariesObj = [[0,{"beneficiaries":[{"account":"netfriend","weight":1000},{"account":"vik","weight":1000}]}]];
       beneficiaries = true
     }
     var newTx = [
@@ -672,11 +672,18 @@ jQuery('#post-golos-form').on('submit', function(e) {
         }]
     ];
 
-    var now = new Date().getTime() + 18e5,
-        expire = new Date(now).toISOString().split('.')[0];
+
     golos.api.getDynamicGlobalProperties(function(e, g) {
 
         if (e) return alert(tryAgain);
+
+        Date.prototype.addHours = function(h) {    
+   this.setTime(this.getTime() + (h*60*60*1000)); 
+   return this;   
+}
+        var d = new Date(g.time).addHours(1);
+        expire = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + "-" + ('0' + d.getDate()).slice(-2) + "T" + ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
+
 
         var taposBlock = g.head_block_number - 2;
 
