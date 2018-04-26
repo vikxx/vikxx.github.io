@@ -2,12 +2,22 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8"/>
-<title>Golos POST</title>
+<title>GOLOS Редактор</title>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:100,300,700,900&amp;subset=cyrillic-ext,latin-ext" rel="stylesheet">
 <style>
-body{margin: 0;padding: 0}
-#map{width:100%;height:300px}#mapCanvas{width:100%;height:400px}input#postingkey{display:block;width:100%}input{margin:5px 0}p.help{background:#f9f9f9;color:#868686;padding:5px;border-radius:3px}.drdrop{padding:10px 0;border-radius:5px}body{font-family:Arial,Helvetica,sans-serif;color:grey}
+body{margin: 0;padding: 0;
+    color: rgb(55, 55, 55);
+    font-family: 'Montserrat', sans-serif;
+}
+input{font-family: inherit;}
+h2 {
+    font-weight: 900;
+    font-size: 1.5rem;
+}
+#map{width:100%;height:300px}#mapCanvas{width:100%;height:400px}input#postingkey{display:block;width:100%}input{margin:5px 0}p.help{background:#f9f9f9;color:#868686;padding:5px;border-radius:3px}.drdrop{padding:10px 0;border-radius:5px}
+
 #text-editor, input {
-    background: #f7f7f7;
+
     border: 0;
     box-shadow: inset 0 0 10px -5px #000;
     color: #000;
@@ -25,7 +35,7 @@ body{margin: 0;padding: 0}
 }
 
 #addimg.loading {
-    background: #ffffff url(https://s3.postimg.org/ejg32n7er/loading.gif) left no-repeat;
+    background: #ffffff url(https://golos.cf/svg/loading.gif) left no-repeat;
     transition: 2s all ease;
     height: 50px;
     background-size: contain;
@@ -45,12 +55,19 @@ body{margin: 0;padding: 0}
 
 .drdrop span{background:#7aa8ff;border:0;padding:10px;color:#fff;border-radius:3px;box-shadow:0 0 16px -7px #000;cursor:pointer}#text-editor img{max-width:100%;height:auto}#text-editor{background:#f7f7f7;min-height:200px;border-radius:5px;padding:1px 10px}.golos-form{padding:5%}
 #alerts {
-    color: #ff5e5e;
+    color: #ff5d5d;
     font-size: 18px;
+    background: #ffffff url(https://golos.cf/svg/loading.gif) no-repeat center top;
     border-radius: 3px;
+    background-size: 50px;
+    min-height: 100px;
+    display: none;
     padding: 20px;
+    text-align: center;
 }
-
+#alerts.published{
+    background:white;
+}
 
 
 input#post-golos-title {
@@ -75,27 +92,26 @@ input#loadinp {
 	position: absolute;
 }
 header {
-    background: #7aa8ff;
+    background:#3783d4;
     color: white;
     padding: 15px;
     font-size: 9pt;
+    font-weight: 700;
 	
 }
-footer#footer {
-    background: #2a2a2a;
-    color: white;
-    padding: 15px;
-}
+
 footer#footer a{
     text-decoration: none;
-    color: white;
+
 }
 footer#footer ul{
 	list-style: none;
 }
 textarea#benics {
-    width: 100%!important;
+    width: 98%!important;
+    padding: 20px 1%;
     display: block;
+    box-shadow: inset 0 0 3px;
 }
 input#Allinpower,input#declinePayout { 
     width: 20px;
@@ -104,34 +120,36 @@ input#Allinpower,input#declinePayout {
     box-shadow: none;
     display: inline;
 }
-#extend{display: none;
-    background: #fafafa;
+.openExt {
+    color: #3782d4;
+    font-size: 14px;
+    margin: 20px 0;
+    cursor: pointer;
+}
+#extend {
+    display: none;
+    background: #ffffff;
     padding: 15px;
-	font-size: 9pt;
+    color: #000000;
+    font-size: 9pt;
     border-radius: 5px;
     margin: 10px auto;
     overflow: hidden;
 }
+#extend input {
+    border: 1px solid #cddeee
+}
 #extend code {
     display: block;
-    margin: 10px 0;
     padding: 10px;
-    background: #222222;
-    color: #40dc46;
+    background: #eeeeee;
+    color: #449384;
     border-radius: 3px;
 }
 input#golosnode {
     font-size: 10pt;
 }
-.openExt {
-    display: block;
-    text-align: center;
-    font-size: 9pt;
-    background: #fafafa;
-    color: black;
-    padding: 10px;
-    cursor: pointer;
-}
+
 img{
     max-width: 100%!important;
     height: auto;
@@ -158,9 +176,9 @@ input#postingkey {
     float: right;
 }
 aside {
-    background: #18264e;
-    width: 270px;
-    padding: 15px;
+    background: #2a70b8;
+    width: 300px;
+    padding:0;
     position: fixed;
     top: 0;
     left: 0;
@@ -179,12 +197,18 @@ aside ul {
     font-size: 9pt;
 }
 aside ul li {
-    border-bottom: 1px solid #253562;
-    padding: 10px 0;
+    padding: 5px 0;
+}
+aside nav {
+    padding: 15px;
 }
 .golos-form {
     padding: 15px;
     
+}
+.redbold{
+    color: red;
+    font-weight: 700;
 }
 header,footer,.golos-form{
     margin-left: 300px;
@@ -193,6 +217,7 @@ p.benevik {
     background: #3cc0ad;
     color: white;
     padding: 5px;
+    display: none;
     border-radius: 5px;
     font-size: 10pt;
     font-weight: 700;
@@ -290,26 +315,12 @@ aside {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
-<style>iframe#chat {
-		width: 95%;
-		display: block;
-		min-height: 270px;
-		margin: 8px auto;
-		border-radius: 3px;
-		overflow: hidden;
-		box-shadow: 0 0 12px -2px black;
-		border: 0;
-	}</style>
 </head>
 <body>
 <header> <h2>Постинг в блокчейн голоса</h2>
-	<p>С помощью данной страницы вы можете записать в блокчейн голоса свой пост. В редактор встроен фотохостинг. Вы можете сохранить исходный код данной страницы
-	на свой пк/телефон и использовать локально.</p>
-	<strong>Поддерживается неограниченное число тегов и подмена имени приложения</strong>
-	<div id="credits">
-			Автор <a href="https://golos.io/@vik">@vik</a>.  Обратная связь - чат <a href="https://t.me/chain_cf">@chain_cf</a>
-			 
-            </div></header>
+<p>С помощью данной страницы вы можете записать в блокчейн голоса свой пост. В редактор встроен фотохостинг imgur</p>
+<p>В расширенных опциях вы можете настроить любых бенефициаров или отключить их, а также поменять адрес ноды, сделать подмену приложения и указать короткую ссылку для своего поста.</p>
+</header>
 
 <section class="golos-form">
 
@@ -323,26 +334,27 @@ aside {
 
 <p> <input type="text" id="tags" name="tags" placeholder="теги"></p>
 
-<p class="benevik"><input type="checkbox" id="benevik" name="benevik" value="on" checked>
-<label for="benevik">💯 Установить vik и netfriend в бенефициары. Это даст 100% upvote при публикации. Бенефактор 10%+10%</label></p>
 <div class="openExt">
 		
 <strong>Расширенные опции - нажмите тут чтобы настроить режим выплаты и бенефициаров <i class="fa fa-caret-down"></i></strong></div> 
 <div id="extend">
-        <p>
-                При желании вы можете задать permlink поста. Это не обязательно.</br>
-                Важно! Permlink должен быть уникальным для вашего блога, если ввести существующий - произойдет не создание поста, а редактирование прежнего поста с таким permlink.	
-                <input type="text" id="permlink" name="permlink" placeholder="permlink / короткая ссылка" pattern="[a-z0-9-]+"/></p>
-                <p> 
-                Имя приложения. Вы можете ввести любое имя приложения и имитировать постинг через golos.io, goldvoice, steepshot и т.д.	
-                <input type="text" id="appname" autocomplete="appname" name="appname" placeholder="Имя приложения для подмены"></p>	
-                <hr>
-                       
-                <p>Бенефициары.</p>
-                Пример ввода настройки. Вес указывается из расчета 100% = 10000, 50% = 5000, 10% = 1000 и т.д.
-                <code>[ {"account": "vik","weight": 1000} , {"account": "netfriend","weight": 1000 } ]</code>
-                <b>Вы можете рассчитывать на апвот от @vik если используете шаблон выше. Подробнее в <a target="_blank" href="https://t.me/cryptoporn">чате поддержки</a></b>
-                <textarea id="benics"></textarea>
+    
+<p class="benevik"><input type="checkbox" id="benevik" name="benevik" value="off">
+    <label for="benevik">💯 Установить vik и netfriend в бенефициары. Это даст 100% upvote при публикации. Бенефактор 10%+10%</label></p>
+   
+    <p>Нода <input title="Укажите адрес ноды через которую хотите размещать пост" type="text" id="golosnode" name="golosnode" placeholder="wss://api.golos.cf"></p>
+<p>
+При желании вы можете задать permlink поста. Это необязательное поле</br>
+Важно! Permlink должен быть уникальным для вашего блога, если ввести существующий - произойдет не создание поста, а редактирование прежнего поста с таким permlink.
+</br>Не знаете что такое permlink? В примере он отмечен красным: golos.io/tag/@vik/<span class="redbold">sexplorer</span>	
+<input type="text" id="permlink" name="permlink" placeholder="my-post" pattern="[a-z0-9-]+"/></p>
+<p> Имя приложения. Вы можете ввести любое имя приложения и имитировать постинг через golos.io, goldvoice, steepshot и т.д.	Технически это ни на что не влияет, просто подпись приложения.
+<input type="text" id="appname" autocomplete="appname" name="appname" placeholder="golos.io/0.1"></p>	
+<p>Бенефициары.</p>
+Пример ввода бенефициаров. Процент отчислений указывается из расчета 100% = 10000, 50% = 5000, 10% = 1000 и т.д.
+<textarea id="benics" placeholder='[ {"account": "логин бенефициара","weight": 1000} , {"account": "логин второго бенефициара","weight": 1000 } ]'></textarea>
+<p>Ниже шаблон, вы можете его скопировать, отредактировать и вставить в поле выше.</p>:
+<code>[ {"account": "vik","weight": 1000} , {"account": "netfriend","weight": 1000 } ]</code>
                 
                 <input type="checkbox" id="Allinpower" name="Allinpower" value="off">
                 <label for="Allinpower">100% в СГ</label>
@@ -355,7 +367,7 @@ aside {
 <input type="username" autocomplete="username" id="username" name="username" required aria-required="true" placeholder="Логин">
 		<input type="password" autocomplete="current-password" role="password" id="postingkey" name="postingkey" required aria-required="true" title="Никому не сообщайте свой ключ!" placeholder="Постинг ключ"/>
 	</div>
-<input type="submit" value="Отправить">
+<input type="submit" value="Отправить" class="sendbutton">
 </form>
 <div id="alerts"></div>
 
@@ -373,8 +385,10 @@ aside {
 </section>
 <aside>
 <nav>
+        
 <ul>
         <li><span id="editpost"><i class="fa fa-code"></i>  Редактировать посты</span></li>
+        <li><a href="https://golos.cf/">📌 История аккаунтов</a></li>
         <li><a href="https://t.me/chain_cf">📌 Тех.поддержка</a></li>
         <li><a href="https://t.me/viknews">📌 Новости</a></li>    
         <li><a href="https://golos.io/@vik">📌 Блог @vik</a></li>
@@ -387,19 +401,20 @@ aside {
 </ul>
 </nav>
 
-<input title="Укажите адрес ноды через которую хотите размещать пост" type="text" id="golosnode" name="golosnode" placeholder="wss://api.golos.cf">
 </aside>
 
 
 
 	 
 <footer id="footer">
-    <iframe id="chat" src="https://chain.chatbro.com" sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
+      
+   
 		</footer>
 <script>
 
 var tryAgain = "Ошибка чтения данных с ноды, подождите несколько секунд и нажмите отправить еще раз или укажите другой адрес ноды!";
 var FixParentPermForEdit = false;
+
 var assoc = {
     "а": "a",
     "б": "b",
@@ -427,7 +442,7 @@ var assoc = {
     "т": "t",
     "у": "u",
     "ф": "f",
-    "x": "kh",
+    "х": "kh",
     "ц": "cz",
     "ч": "ch",
     "ш": "sh",
@@ -485,8 +500,8 @@ var MD = new SimpleMDE({
     indentWithTabs: true,
     insertTexts: {
         horizontalRule: ["", "\n\n-----\n\n"],
-        image: ["![](http://", ")"],
-        link: ["[", "](http://)"],
+        image: ["![](https://", ")"],
+        link: ["[", "](https://)"],
         table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"],
     },
 
@@ -521,7 +536,9 @@ var MD = new SimpleMDE({
     toolbarTips: true,
 
 });
-jQuery(document).ready(function($) {
+
+var isEditMode = false;
+
     $(".openExt").click(function() {
         $('#extend').fadeIn()
     });
@@ -535,8 +552,9 @@ jQuery(document).ready(function($) {
         $('.postedit').fadeIn();
     });
     $("#load4edit").click(function() {
-
-        golos.config.set('websocket','wss://ws.golos.io');  
+        isEditMode = true;
+       var wssg = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://api.golos.cf';
+        golos.config.set('websocket',wssg);  
         var editUrl = document.getElementById("postediturl").value.toLowerCase();
         if(!editUrl)return alert('Введите ссылку!');
         var urlPrepare = editUrl.split("@");
@@ -567,7 +585,7 @@ jQuery(document).ready(function($) {
 
 
 
-});
+
 
 var featuredImage = [];
 window.ondragover = function(e) {
@@ -598,13 +616,19 @@ function upload(file) {
     xhr.setRequestHeader('Authorization', 'Client-ID 28aaa2e823b03b1');
     xhr.send(fd);
 }
-jQuery('#post-golos-form').on('submit', function(e) {
-    e.preventDefault();
 
+
+jQuery(document).ready(function($) {
+
+$('#post-golos-form').on('submit', function(e) {
+    e.preventDefault();
+    $('#alerts').fadeIn();
+    
+    $('.sendbutton').fadeOut();
 
 
     var posttitle = document.getElementById("post-golos-title").value,
-        wssgolos = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://ws.golos.io',
+        wssgolos = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://api.golos.cf',
         post_body = MD.value(),
         author = document.getElementById("username").value.toLowerCase().replace(/@/g, ''),
         appname = (document.getElementById("appname").value)?document.getElementById("appname").value:'@vik',
@@ -648,20 +672,11 @@ jQuery('#post-golos-form').on('submit', function(e) {
         }]
     ];
     if(document.getElementById("benevik").checked){
-      beneficiariesObj = [[0,{"beneficiaries":[{"account":"netfriend","weight":1000},{"account":"vik","weight":1000}]}]];
+      beneficiariesObj = [[0,{"beneficiaries":[{"account":"vik","weight":1000},{"account":"netfriend","weight":1000}]}]];
       beneficiaries = true
     }
-    var newTx = [
-        ["comment", {
-            "parent_author": "",
-            "parent_permlink": parentPermlink,
-            "author": author,
-            "permlink": permlink,
-            "title": posttitle,
-            "body": post_body,
-            "json_metadata": JSON.stringify(jsonMetadata)
-        }],
-        ["comment_options", {
+
+    var commentOptions = ["comment_options", {
             "author": author,
             "permlink": permlink,
             "max_accepted_payout": (declinePayout) ? '0.000 GBG' : '1000000.000 GBG',
@@ -669,9 +684,19 @@ jQuery('#post-golos-form').on('submit', function(e) {
             "allow_votes": true,
             "allow_curation_rewards": true,
             "extensions": (beneficiaries) ? beneficiariesObj : []
-        }]
-    ];
+        }];
 
+    var newTx = [["comment", {
+            "parent_author": "",
+            "parent_permlink": parentPermlink,
+            "author": author,
+            "permlink": permlink,
+            "title": posttitle,
+            "body": post_body,
+            "json_metadata": JSON.stringify(jsonMetadata)
+        }] ];
+
+       if(!isEditMode && (declinePayout||Allinpower||beneficiaries))newTx.push(commentOptions);
 
     golos.api.getDynamicGlobalProperties(function(e, g) {
 
@@ -681,12 +706,9 @@ jQuery('#post-golos-form').on('submit', function(e) {
    this.setTime(this.getTime() + (h*60*60*1000)); 
    return this;   
 }
-        var d = new Date(g.time).addHours(1);
+        var d = new Date(g.time).addHours(0.4);
         expire = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + "-" + ('0' + d.getDate()).slice(-2) + "T" + ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
-
-
         var taposBlock = g.head_block_number - 2;
-
         golos.api.getBlockHeader(taposBlock, function(err, blockLink) {
             if (err) return alert(tryAgain);
             var blockid = blockLink.previous;
@@ -718,17 +740,21 @@ jQuery('#post-golos-form').on('submit', function(e) {
                 return alert("Не удалось подписать транзакцию c постом. Откройте консоль браузера для просмотра подробностей" + error.message);
 
             }
-            console.log(JSON.stringify(trxs))
+            console.log(JSON.stringify(trxs,null,4))
 
-
-
-         golos.api.broadcastTransactionSynchronous(trxs, function(err, result) {
+        if(author==='tester')return console.log(JSON.stringify(trxs,null,4));
+        golos.api.broadcastTransactionSynchronous(trxs, function(err, result) {
                 console.log(err, result);
-                if (err) return document.getElementById('alerts').innerHTML = ('<blockquote>Ошибка! ' + err + '</blockquote>');
+                if (err) {
+                    $('.sendbutton').fadeIn();
+                    return document.getElementById('alerts').innerHTML = ('<blockquote style="color:red"><h4>Ошибка!</h4> <pre><xmp>' + err + '</xmp><pre></blockquote>');}
                 document.getElementById('alerts').innerHTML = ('<blockquote>Пост размещен!</blockquote>');
+                $('#alerts').addClass('published')
             });
         });
     });
+
+});
 
 });
 </script>
