@@ -311,7 +311,6 @@ aside {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
-
 </head>
 <body>
 <header> <h2>Постинг в блокчейн голоса</h2>
@@ -625,7 +624,7 @@ $('#post-golos-form').on('submit', function(e) {
     var posttitle = document.getElementById("post-golos-title").value,
         wssgolos = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://ws.golos.io',
         post_body = MD.value(),
-        author = document.getElementById("username").value.toLowerCase().replace(/@/g, ''),
+        author = document.getElementById("username").value.toLowerCase().replace(/ /g, '').replace(/@/g, ''),
         appname = (document.getElementById("appname").value)?document.getElementById("appname").value:'@vik',
         wif = document.getElementById("postingkey").value;
     var permlink = document.getElementById("permlink").value.toLowerCase().replace(/\,/g, '-').replace(/\./g, '-');
