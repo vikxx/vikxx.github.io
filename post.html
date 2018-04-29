@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8"/>
-<meta http-equiv="pragma" content="no-cache" />
 <title>GOLOS Редактор</title>
 <link href="https://fonts.googleapis.com/css?family=Montserrat:100,300,700,900&amp;subset=cyrillic-ext,latin-ext" rel="stylesheet">
 <style>
@@ -20,6 +19,12 @@ h2 {
 
 
 input{margin:5px 0}p.help{background:#f9f9f9;color:#868686;padding:5px;border-radius:3px}.drdrop{padding:10px 0;border-radius:5px}
+.drdrop.fullscreen {
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    z-index: 100;
+}
 
 #text-editor, input {
 
@@ -118,13 +123,14 @@ textarea#benics {
     display: block;
     box-shadow: inset 0 0 3px;
 }
-input#Allinpower,input#declinePayout { 
+input#Allinpower,input#declinePayout,input#declineCur { 
     width: 20px;
     padding: 0;
     margin: 20px 0;
     box-shadow: none;
     display: inline;
 }
+
 .openExt {
     color: #3782d4;
     font-size: 14px;
@@ -146,10 +152,8 @@ input#Allinpower,input#declinePayout {
 }
 #extend code {
     display: block;
-    padding: 10px;
-    background: #eeeeee;
-    color: #449384;
-    border-radius: 3px;
+    color: #1e955d;
+    font-size: 12px;
 }
 input#golosnode {
     font-size: 10pt;
@@ -217,8 +221,7 @@ header,footer,.golos-form{
 }
 p.benevik {
     background: #3cc0ad;
-    color: white;
-    display: none;
+    color: white; 
     padding: 5px;
     border-radius: 5px;
     font-size: 10pt;
@@ -329,32 +332,49 @@ aside {
 
 
 <p> <input type="text" id="tags" name="tags" required aria-required="true" placeholder="теги"></p>
-
+    
+<p class="benevik"><input type="checkbox" id="benevik" name="benevik" value="off">
+    <label for="benevik">💯 Автоматически установить vik и netfriend в бенефициары. Бенефактор 10%+10%</label></p>
 <div class="openExt">
 		
 <strong>Расширенные опции - нажмите тут чтобы настроить режим выплаты и бенефициаров <i class="fa fa-caret-down"></i></strong></div> 
 <div id="extend">
-    
-<p class="benevik"><input type="checkbox" id="benevik" name="benevik" value="off">
-<label for="benevik">💯 Установить vik и netfriend в бенефициары. Это даст 100% upvote при публикации. Бенефактор 10%+10%</label></p>
+
 <p>Нода <input title="Укажите адрес ноды через которую хотите размещать пост" type="text" id="golosnode" name="golosnode" placeholder="wss://api.golos.cf"></p>
+
+
+<p>Ссылка на изображение обложки поста
+    <input type="url" id="feature" name="feature" placeholder="https://site.com/image.jpg"/></p>
+
 <p>При желании вы можете задать permlink поста. Это необязательное поле</br>
 Важно! Permlink должен быть уникальным для вашего блога, если ввести существующий - произойдет не создание поста, а редактирование прежнего поста с таким permlink.
 </br>Не знаете что такое permlink? В примере он отмечен красным: golos.io/tag/@vik/<span class="redbold">sexplorer</span>	
 <input type="text" id="permlink" name="permlink" placeholder="my-post" pattern="[a-z0-9-]+"/></p>
 <p> Имя приложения. Вы можете ввести любое имя приложения и имитировать постинг через golos.io, goldvoice, steepshot и т.д.	Технически это ни на что не влияет, просто подпись приложения.
 <input type="text" id="appname" autocomplete="appname" name="appname" placeholder="golos.io/0.1"></p>	
-<p>Бенефициары.</p>
-Пример ввода бенефициаров. Процент отчислений указывается из расчета 100% = 10000, 50% = 5000, 10% = 1000 и т.д.
-<textarea id="benics" placeholder='[ {"account": "логин бенефициара","weight": 1000} , {"account": "логин второго бенефициара","weight": 1000 } ]'></textarea>
-<p>Ниже шаблон, вы можете его скопировать, отредактировать и вставить в поле выше.</p>:
-<code>[ {"account": "vik","weight": 1000} , {"account": "netfriend","weight": 1000 } ]</code>
-                
-                <input type="checkbox" id="Allinpower" name="Allinpower" value="off">
+<p>Бенефициары</p>
+<textarea id="benics" placeholder='Сюда нужно вводить код с бенефициарамии...'></textarea>
+
+<p>Ниже просто шаблон, вы можете его скопировать, отредактировать и вставить в поле выше.  Процент отчислений указывается из расчета 100% = 10000, 50% = 5000, 10% = 1000 и т.д.:
+<code>[{"account":"vik","weight":5000},{"account":"netfriend","weight":5000}]</code></p>
+ 
+
+<h3>Для опытных пользователей</h3>
+<p>Родительская ссылка parent_permlink (Для размещения комментария или имитации вебклиентов)
+<input type="text" id="parentpermlink" name="parentpermlink" placeholder="parent-permlink" pattern="[a-z0-9-]+"/></p>
+<p>Автор-родитель parent_author (используется для размещения комментария, не поста)
+<input type="text" id="parentauthor" name="parentauthor" placeholder="parent-author" pattern="[a-z0-9-.]+"/></p>
+
+               
+    
+<input type="checkbox" id="Allinpower" name="Allinpower" value="off">
                 <label for="Allinpower">100% в СГ</label>
                 
                 <input type="checkbox" id="declinePayout" name="declinePayout" value="off">
-                <label for="declinePayout">Отказаться от выплат</label>
+                <label for="declinePayout">Отказаться от авторских выплат</label>
+
+                <input type="checkbox" id="declineCur" name="declineCur" value="off">
+                <label for="declineCur">Отключить выплату кураторам</label>
 </div>
 
 <div class="auth">
@@ -408,6 +428,9 @@ aside {
 
 var tryAgain = "Ошибка чтения данных с ноды, подождите несколько секунд и нажмите отправить еще раз или укажите другой адрес ноды!";
 var FixParentPermForEdit = false;
+
+
+
 
 var assoc = {
     "а": "a",
@@ -508,7 +531,7 @@ var MD = new SimpleMDE({
 
     promptURLs: true,
     renderingConfig: {
-        singleLineBreaks: false,
+        singleLineBreaks: true,
         codeSyntaxHighlighting: true,
     },
 
@@ -522,11 +545,20 @@ var MD = new SimpleMDE({
         onUpdate: function(el) {
             el.innerHTML = ++this.keystrokes + " Нажатий";
         }
-    }], // Another optional usage, with a custom status bar item that counts keystrokes
+    }],
     styleSelectedText: true,
     tabSize: 4,
     toolbar: true,
-    toolbar: ["side-by-side", "preview", "bold", "italic", "|", "heading", "heading-1", "heading-2", "heading-3", "|", "quote", "code", "unordered-list", "table", "horizontal-rule", "guide"],
+    toolbar: [{
+			name:"side-by-side",
+			action: function customFunction(){
+              $('.drdrop').toggleClass('fullscreen')
+                MD.toggleSideBySide();
+               
+			},
+            title: "Справа редактор | Слева просмотр",
+            className: "fa fa-columns"
+		}, "preview", "bold", "italic", "|", "image" , "|", "heading", "|", "quote", "code", "unordered-list", "table", "horizontal-rule", "fullscreen"],
     toolbarTips: true,
 
 });
@@ -568,7 +600,9 @@ var isEditMode = false;
         $('#appname').val(jmeta.app);
         $('#permlink').val(result.permlink);
         $('#username').val(result.author);
-        FixParentPermForEdit = jmeta.tags[0];
+        $('#username').val(result.author);
+        $('#parentpermlink').val(result.parent_permlink);
+        FixParentPermForEdit =true;
         MD.value(result.body);
         $('#permlink').fadeOut();
         $('.postedit').fadeOut();
@@ -614,6 +648,8 @@ function upload(file) {
 
 jQuery(document).ready(function($) {
 
+  
+
 $('#post-golos-form').on('submit', function(e) {
     e.preventDefault();
     $('#alerts').fadeIn();
@@ -624,16 +660,22 @@ $('#post-golos-form').on('submit', function(e) {
     var posttitle = document.getElementById("post-golos-title").value,
         wssgolos = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://ws.golos.io',
         post_body = MD.value(),
+        feature = document.getElementById("feature").value.replace(/ /g, ''),
         author = document.getElementById("username").value.toLowerCase().replace(/ /g, '').replace(/@/g, ''),
         appname = (document.getElementById("appname").value)?document.getElementById("appname").value:'@vik',
         wif = document.getElementById("postingkey").value;
+
     var permlink = document.getElementById("permlink").value.toLowerCase().replace(/\,/g, '-').replace(/\./g, '-');
     golos.config.set('websocket',wssgolos);
 
-    if (!permlink) {
-            permlink = transform(posttitle, "-"),
-            permlink = permlink.replace(/[^a-z0-9-]+/gi, '');
-    }
+if (!permlink) {
+      permlink = transform(posttitle, "-"),
+      permlink=permlink.replace(/([^a-zA-Z0-9 \-]*)/g,'');
+      permlink=permlink.replace(/---/g,'-');
+      permlink=permlink.replace(/--/g,'-');
+      permlink=permlink.replace(/--/g,'-');
+      permlink=permlink.replace(/^\-+|\-+$/g, '');
+}
 
 
 
@@ -651,12 +693,18 @@ $('#post-golos-form').on('submit', function(e) {
             "app": appname,
             "format": "markdown",
             "tags": tags,
-            "image": featuredImage
+            "image": (feature)?[feature]:featuredImage
         },
-        parentPermlink =(FixParentPermForEdit)?FixParentPermForEdit:tags[0];
-    var beneficiaries = document.getElementById("benics").value;
-    var Allinpower = document.getElementById("Allinpower").checked;
-    var declinePayout = document.getElementById("declinePayout").checked;
+        parentpermlink = document.getElementById("parentpermlink").value,
+        parentPermlink =(isEditMode || parentpermlink)?parentpermlink:tags[0],
+        beneficiaries = document.getElementById("benics").value,
+        Allinpower = document.getElementById("Allinpower").checked,
+        declinePayout = document.getElementById("declinePayout").checked,
+        allowCur = (document.getElementById("declineCur").checked)?false:true,
+        parentauthor = document.getElementById("parentauthor").value;
+
+       
+        
 
     
 
@@ -678,7 +726,7 @@ $('#post-golos-form').on('submit', function(e) {
             "max_accepted_payout": (declinePayout) ? '0.000 GBG' : '1000000.000 GBG',
             "percent_steem_dollars": (Allinpower) ? 0 : 10000,
             "allow_votes": true,
-            "allow_curation_rewards": true,
+            "allow_curation_rewards": allowCur,
             "extensions": (beneficiaries) ? beneficiariesObj : []
         }];
 
@@ -692,7 +740,7 @@ $('#post-golos-form').on('submit', function(e) {
             "json_metadata": JSON.stringify(jsonMetadata)
         }] ];
 
-       if(!isEditMode && (declinePayout||Allinpower||beneficiaries))newTx.push(commentOptions);
+       if(!isEditMode && (declinePayout||Allinpower||beneficiaries||!allowCur))newTx.push(commentOptions);
 
     golos.api.getDynamicGlobalProperties(function(e, g) {
 
@@ -755,10 +803,16 @@ $('#post-golos-form').on('submit', function(e) {
                      if(etxt.includes('permlink is too long'))errorNotice='Слишком длинный permlink! Используйте заголовок короче или настройте короткую ссылку в расширенных опциях!';
                      if(etxt.includes('Invalid permlink character'))errorNotice='Ошибка! permlink содержит недопустимый символ! Отредактируйте поле permlink или первый тег поста';
                      
+                     if(etxt.includes('STEEMIT_MIN_ROOT_COMMENT_INTERVAL'))errorNotice='Ошибка! Должно пройти 5 минут с момента публикации последнего поста.';
+                     
+
+                     
                     return document.getElementById('alerts').innerHTML = ('<blockquote style="color:red"><h4>Ошибка!</h4> <pre><xmp>' + errorNotice + '</xmp><pre></blockquote>');
                     }
-                    
-                document.getElementById('alerts').innerHTML = ('<blockquote>Пост размещен!</blockquote>');
+                var postUrl = '<a href="https://golos.cf/'+parentPermlink+'/@'+author+'/'+permlink+'">@'+author+'/'+permlink+'</a>';
+                var succesPub = (isEditMode)?'Пост отредактирован ':'Пост размещен ';
+
+                document.getElementById('alerts').innerHTML = (succesPub+postUrl);
                 $('#alerts').addClass('published')
                 $('.sendbutton').fadeOut();
             });
