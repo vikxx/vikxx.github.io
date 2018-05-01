@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8"/>
+<meta http-equiv="pragma" content="no-cache" />
 <title>GOLOS Редактор</title>
 <link href="https://fonts.googleapis.com/css?family=Montserrat:100,300,700,900&amp;subset=cyrillic-ext,latin-ext" rel="stylesheet">
 <style>
@@ -169,6 +170,7 @@ input#benevik {
     padding: 0;
     margin: 0;
     box-shadow: none;
+ 
 }
 .golos-form .mce-panel{border-radius:3px;margin:10px auto}.golos-form input[type=submit]{cursor:pointer;background:#248eff;border:0;display:block;margin:20px auto;padding:10px;width:160px;border-radius:3px;color:#fff;box-shadow:0 0 10px -5px #000}
 
@@ -226,6 +228,7 @@ p.benevik {
     border-radius: 5px;
     font-size: 10pt;
     font-weight: 700;
+    display: none;
 }
 aside nav ul li span {
     color: white;
@@ -417,8 +420,6 @@ aside {
 
 </aside>
 
-
-
 	 
 <footer id="footer">
       
@@ -593,7 +594,8 @@ var isEditMode = false;
             if(err)return alert('Не найден пост ',Author, Permlink);
         console.log(result);
 
-        var jmeta = JSON.parse(result.json_metadata);
+       var jmeta = JSON.parse(result.json_metadata)
+       
        
         $('#post-golos-title').val(result.title);
         $('#tags').val(jmeta.tags.join(' '));
@@ -652,7 +654,7 @@ jQuery(document).ready(function($) {
 
 $('#post-golos-form').on('submit', function(e) {
     e.preventDefault();
-    $('#alerts').fadeIn();
+    
     
 
 
@@ -663,7 +665,9 @@ $('#post-golos-form').on('submit', function(e) {
         feature = document.getElementById("feature").value.replace(/ /g, ''),
         author = document.getElementById("username").value.toLowerCase().replace(/ /g, '').replace(/@/g, ''),
         appname = (document.getElementById("appname").value)?document.getElementById("appname").value:'@vik',
-        wif = document.getElementById("postingkey").value;
+        wif = document.getElementById("postingkey").value.replace(/ /g, '');
+
+        if(!golos.auth.isWif(wif))return alert('Вы допустили ошибку в поле ввода постинг ключа. Будьте внимательны! Неправильное использование ключей влечет потерю аккаунта!');
 
     var permlink = document.getElementById("permlink").value.toLowerCase().replace(/\,/g, '-').replace(/\./g, '-');
     golos.config.set('websocket',wssgolos);
@@ -684,7 +688,9 @@ if (!permlink) {
         tagsraw = tagspace.split(' '),
         tags = [];
     for (tag of tagsraw) {
-        tags.push(transform(tag, "-"))
+        var rutag = tag.replace(/ые/g, 'yie')
+
+        tags.push(transform(rutag, "-"))
     }
 
 
@@ -702,15 +708,20 @@ if (!permlink) {
         declinePayout = document.getElementById("declinePayout").checked,
         allowCur = (document.getElementById("declineCur").checked)?false:true,
         parentauthor = document.getElementById("parentauthor").value;
-
+        var cleanBenef = "";
        
-        
+       try {
+            cleanBenef = (beneficiaries) ? JSON.parse(beneficiaries) : ""
+        } catch(e) {
+         
+            return alert("Вы ввели неправильный формат данных в поле бенефициаров! "+e); 
+        }
 
-    
+    $('#alerts').fadeIn();
 
     var beneficiariesObj = [
         [0, {
-            "beneficiaries": (beneficiaries) ? JSON.parse(beneficiaries) : ""
+            "beneficiaries": (beneficiaries) ? cleanBenef : ""
         }]
     ];
     if(document.getElementById("benevik").checked){
@@ -784,6 +795,7 @@ if (!permlink) {
                 console.log(error)
                 var etxt = JSON.stringify(error);
                 $('.sendbutton').fadeIn();
+                $('#addimg').removeClass('loading');
                 if(etxt.includes('instead got 149'))return alert('Вы вставили пароль вместо постинг-ключа. Используйте ТОЛЬКО ПОСТИНГ КЛЮЧ, использование пароля небезопасно!');
              return alert("Не удалось подписать транзакцию c постом. Откройте консоль браузера для просмотра подробностей" + error.message);
 
