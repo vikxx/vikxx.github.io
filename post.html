@@ -6,6 +6,16 @@
 <title>GOLOS Редактор</title>
 <link href="https://fonts.googleapis.com/css?family=Montserrat:100,300,700,900&amp;subset=cyrillic-ext,latin-ext" rel="stylesheet">
 <style>
+    p.benevik {
+    background: #3cc0ad;
+    color: white; 
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 10pt;
+    font-weight: 700;
+    display: none;
+    
+} 
 body{margin: 0;padding: 0;
     color: rgb(55, 55, 55);
     font-family: 'Montserrat', sans-serif;
@@ -170,7 +180,7 @@ input#benevik {
     padding: 0;
     margin: 0;
     box-shadow: none;
- 
+  
 }
 .golos-form .mce-panel{border-radius:3px;margin:10px auto}.golos-form input[type=submit]{cursor:pointer;background:#248eff;border:0;display:block;margin:20px auto;padding:10px;width:160px;border-radius:3px;color:#fff;box-shadow:0 0 10px -5px #000}
 
@@ -221,15 +231,7 @@ aside nav {
 header,footer,.golos-form{
     margin-left: 300px;
 }
-p.benevik {
-    background: #3cc0ad;
-    color: white; 
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 10pt;
-    font-weight: 700;
-    display: none;
-}
+
 aside nav ul li span {
     color: white;
     cursor: pointer;
@@ -312,10 +314,11 @@ aside {
 <meta name="Description" content="Мультиплатформенная публикация постов в голос + встроенный фотохостинг">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 <link rel="icon" type="image/x-icon" href="https://golos.io/images/favicons/favicon.ico"/>
-<script src="https://unpkg.com/golos-js@0.6.3/dist/golos.min.js"></script>
+<script src="https://unpkg.com/golos-js@0.7.0/dist/golos.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
 
 </head>
 <body>
@@ -355,14 +358,15 @@ aside {
 <input type="text" id="permlink" name="permlink" placeholder="my-post" pattern="[a-z0-9-]+"/></p>
 <p> Имя приложения. Вы можете ввести любое имя приложения и имитировать постинг через golos.io, goldvoice, steepshot и т.д.	Технически это ни на что не влияет, просто подпись приложения.
 <input type="text" id="appname" autocomplete="appname" name="appname" placeholder="golos.io/0.1"></p>	
+<h3>Для опытных пользователей</h3>
 <p>Бенефициары</p>
+
+
+<p>Ниже просто шаблон, вы можете его скопировать, отредактировать и вставить в поле.  Процент отчислений <b>"weight"</b> указывается из расчета 100% = 10000, 50% = 5000, 10% = 1000, 1% = 100 и т.д.:
+<code>[{"account":"логин-бенефициара1","weight":2000},{"account":"логин-бенефициара2","weight":1000}]</code></p>
 <textarea id="benics" placeholder='Сюда нужно вводить код с бенефициарамии...'></textarea>
 
-<p>Ниже просто шаблон, вы можете его скопировать, отредактировать и вставить в поле выше.  Процент отчислений указывается из расчета 100% = 10000, 50% = 5000, 10% = 1000 и т.д.:
-<code>[{"account":"vik","weight":5000},{"account":"netfriend","weight":5000}]</code></p>
- 
 
-<h3>Для опытных пользователей</h3>
 <p>Родительская ссылка parent_permlink (Для размещения комментария или имитации вебклиентов)
 <input type="text" id="parentpermlink" name="parentpermlink" placeholder="parent-permlink" pattern="[a-z0-9-]+"/></p>
 <p>Автор-родитель parent_author (используется для размещения комментария, не поста)
@@ -419,6 +423,8 @@ aside {
 </nav>
 
 </aside>
+
+
 
 	 
 <footer id="footer">
@@ -510,11 +516,13 @@ var MD = new SimpleMDE({
     },
     blockStyles: {
         bold: "**",
-        italic: "*"
+        italic: "*",
+        strikethrough:"~"
+
     },
     element: document.getElementById("text-editor"),
     forceSync: true,
-    spellChecker: false,
+   spellChecker: false,
     indentWithTabs: true,
     insertTexts: {
         horizontalRule: ["", "\n\n-----\n\n"],
@@ -559,7 +567,7 @@ var MD = new SimpleMDE({
 			},
             title: "Справа редактор | Слева просмотр",
             className: "fa fa-columns"
-		}, "preview", "bold", "italic", "|", "image" , "|", "heading", "|", "quote", "code", "unordered-list", "table", "horizontal-rule", "fullscreen"],
+		}, "preview", "bold", "italic", "strikethrough","|", "image" , "|", "heading", "|", "quote", "code", "unordered-list", "table", "horizontal-rule", "fullscreen"],
     toolbarTips: true,
 
 });
@@ -580,7 +588,7 @@ var isEditMode = false;
     });
     $("#load4edit").click(function() {
         isEditMode = true;
-       var wssg = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://ws.golos.io';
+       var wssg = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://api.golos.cf';
         golos.config.set('websocket',wssg);  
         var editUrl = document.getElementById("postediturl").value.toLowerCase();
         if(!editUrl)return alert('Введите ссылку!');
@@ -590,7 +598,7 @@ var isEditMode = false;
         var Author = urlPrepare[0].replace(/ /g,'');
         if(!Author||!Permlink)return alert('Ссылка не действительна!')
         
-        golos.api.getContent(Author, Permlink, function(err, result) {
+        golos.api.getContent(Author, Permlink, 0,function(err, result) {
             if(err)return alert('Не найден пост ',Author, Permlink);
         console.log(result);
 
@@ -657,10 +665,8 @@ $('#post-golos-form').on('submit', function(e) {
     
     
 
-
-
     var posttitle = document.getElementById("post-golos-title").value,
-        wssgolos = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://ws.golos.io',
+        wssgolos = (document.getElementById("golosnode").value)?document.getElementById("golosnode").value:'wss://api.golos.cf',
         post_body = MD.value(),
         feature = document.getElementById("feature").value.replace(/ /g, ''),
         author = document.getElementById("username").value.toLowerCase().replace(/ /g, '').replace(/@/g, ''),
@@ -821,12 +827,17 @@ if (!permlink) {
                      
                     return document.getElementById('alerts').innerHTML = ('<blockquote style="color:red"><h4>Ошибка!</h4> <pre><xmp>' + errorNotice + '</xmp><pre></blockquote>');
                     }
-                var postUrl = '<a href="https://golos.cf/'+parentPermlink+'/@'+author+'/'+permlink+'">@'+author+'/'+permlink+'</a>';
+                var directUrl = 'https://golos.cf/'+parentPermlink+'/@'+author+'/'+permlink;    
+                var postUrl = '<a href="'+directUrl+'">@'+author+'/'+permlink+'</a>';
                 var succesPub = (isEditMode)?'Пост отредактирован ':'Пост размещен ';
 
                 document.getElementById('alerts').innerHTML = (succesPub+postUrl);
                 $('#alerts').addClass('published')
                 $('.sendbutton').fadeOut();
+
+                MD.value("");
+                window.location.replace(directUrl);
+
             });
         });
     });
