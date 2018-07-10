@@ -13,7 +13,7 @@ for (i = 0; i < a.length; i++) {
 }
 var c=0;
 for (i = 0; i < p.length; i++) {
-steem.api.getContent(p[i].u, p[i].p, function(err, d) {
+steem.api.getContent(p[i].u, p[i].p,100, function(err, d) {
 console.log(d);
 var meta = JSON.parse(d.json_metadata),oneimg = meta.image[0];
 
