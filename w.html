@@ -4123,7 +4123,7 @@ function testnetname(x,xx){
     return outnames.innerHTML = '<div class="testnetauth"><p>Account name: <b>'+x[0].resolved_username+'</b></p><p><code>'+xx.owner+'</code>  '+xx.ownerPubkey+' OWNER</p><p><code>'+xx.active+'</code>  '+xx.activePubkey+' ACTIVE</p><p><code>'+xx.posting+'</code>  '+xx.postingPubkey+' POSTING</p></div>';
 }
 
-var rpc = new eosjs_jsonrpc.default('https://con.chain.cf');
+var rpc = new eosjs_jsonrpc.default('http://116.203.104.164:8888');
 var api = new eosjs_api.default({ rpc });
 function sendTX(x){       
     
